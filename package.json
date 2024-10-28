@@ -1,0 +1,16 @@
+{
+    "name": "@kerd1k/documentgenerator",
+    "version": "1.0.0",
+    "main": "documentgenerator.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dg": "documentgenerator"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "bin": {
+        "documentgenerator": "documentgenerator.js"
+    }
+}
