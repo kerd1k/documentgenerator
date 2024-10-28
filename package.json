@@ -1,15 +1,23 @@
 {
     "name": "@kerd1k/documentgenerator",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "main": "documentgenerator.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dg": "documentgenerator"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kerd1k/documentgenerator.git"
+    },
+    "homepage": "https://github.com/kerd1k/documentgenerator#readme",
     "keywords": [],
-    "author": "",
+    "author": {
+        "name": "Aleksejs Cetverikovs",
+        "email": "kerd1k@gmail.com"
+    },
     "license": "ISC",
-    "description": "",
+    "description": "Generate Json from JavaDoc comments",
     "bin": {
         "documentgenerator": "documentgenerator.js"
     }
