@@ -9,26 +9,24 @@ try {
     const injectVariable = getArgument("--injectVariable", "{{docjson}}");
     const template = getArgument("--template", null);
 
-    const settings = {
+    const documentGeneratorConfig = {
         sourcePath: getArgument("--source", null),
         apiEndpoint: getArgument("--endpoint", "/api"),
     };
 
-    const documentGenerator = new DocumentGenerator(settings);
+    const documentGenerator = new DocumentGenerator(documentGeneratorConfig);
 
     if (destination) {
         documentGenerator.saveDocumentation(destination);
     }
 
     if (template) {
-        copyFile("./template.html", template);
+        copyFile(`${__dirname}/template.html`, template);
     }
 
     if (injectFile && injectVariable) {
         replaceInFile(injectFile, `${injectVariable}`, documentGenerator.getDocumentationString());
     }
-
-    // console.log(documentGenerator.getDocumentation(true));
 } catch (error) {
     console.error(`Error: ${error}`);
 }

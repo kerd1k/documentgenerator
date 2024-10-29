@@ -261,7 +261,7 @@ export class DocumentGenerator {
                 text = text
                     .trim()
                     .replace(/^(\-.)/, "")
-                    .replace('"', "'")
+                    .replaceAll('"', "'")
                     .trim();
 
                 break;
