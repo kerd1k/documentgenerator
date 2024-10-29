@@ -9,17 +9,18 @@
         "test": "jest",
         "dg": "documentgenerator"
     },
-    "keywords": [
-        "json",
-        "jsdoc",
-        "javadoc",
-        "comments",
-        "document",
-        "generator"
-    ],
-    "author": "",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kerd1k/documentgenerator.git"
+    },
+    "homepage": "https://github.com/kerd1k/documentgenerator#readme",
+    "keywords": [],
+    "author": {
+        "name": "Aleksejs Cetverikovs",
+        "email": "kerd1k@gmail.com"
+    },
     "license": "ISC",
-    "description": "",
+    "description": "Generate Json from JavaDoc comments",
     "bin": {
         "documentgenerator": "./dist/index.js"
     },
