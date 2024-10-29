@@ -31,3 +31,11 @@ export const replaceInFile = (filePath: string, searchText: string, replaceText:
 
     fs.writeFileSync(filePath, updatedData, "utf-8");
 };
+
+export const copyFile = (sourcePath: string, destinationPath: string) => {
+    if (!fs.existsSync(sourcePath)) {
+        throw new Error("Copied file does not exist");
+    }
+
+    const data = fs.copyFileSync(sourcePath, destinationPath);
+};

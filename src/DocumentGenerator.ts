@@ -277,24 +277,21 @@ export class DocumentGenerator {
         return text;
     }
 
-    public saveDocumentation(savePath: string, savePathFileName: string): void {
+    public saveDocumentation(savePath: string): void {
         // const formatForSave = { data: this.documentation };
-        if (!savePath || !savePathFileName) {
-            this.raiseError("No savePath or savePathFileName in config");
+        if (!savePath) {
+            this.raiseError("No savePath in config");
             // return;
         }
 
-        const dir = path.dirname(savePath + savePathFileName);
+        const dir = path.dirname(savePath);
         if (!fs.existsSync(dir)) {
             // fs.mkdirSync(dir, { recursive: true });
             this.raiseError("Save directory does not exist");
             // return;
         }
 
-        const formatForSave = this.documentation;
-        const filePath = savePath + savePathFileName;
-
-        fs.writeFileSync(filePath, JSON.stringify(formatForSave, null, 2));
+        fs.writeFileSync(savePath, JSON.stringify(this.documentation, null, 2));
     }
 
     public getDocumentation(): DocumentGeneratorDocumentation {

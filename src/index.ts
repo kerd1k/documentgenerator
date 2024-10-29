@@ -1,30 +1,31 @@
 #!/usr/bin/env node
 
 import { DocumentGenerator } from "./DocumentGenerator";
-import { getArgument, replaceInFile } from "./utils";
+import { copyFile, getArgument, replaceInFile } from "./utils";
 
 try {
     const destination = getArgument("--destination", null);
-    const destinationFileName = getArgument("--destinationFileName", "doc.json");
-
-    const injectFileName = getArgument("--injectFileName", null);
-    const injectVariable = getArgument("--injectVariable", null);
+    const injectFile = getArgument("--inject", null);
+    const injectVariable = getArgument("--injectVariable", "{{docjson}}");
+    const template = getArgument("--template", null);
 
     const settings = {
         sourcePath: getArgument("--source", null),
         apiEndpoint: getArgument("--endpoint", "/api"),
-        // savePath: destination,
-        // savePathFileName: destinationFileName,
     };
 
     const documentGenerator = new DocumentGenerator(settings);
 
-    if (destination && destinationFileName) {
-        documentGenerator.saveDocumentation(destination, destinationFileName);
+    if (destination) {
+        documentGenerator.saveDocumentation(destination);
     }
 
-    if (injectFileName && injectVariable) {
-        replaceInFile(injectFileName, `${injectVariable}`, documentGenerator.getDocumentationString());
+    if (template) {
+        copyFile("./template.html", template);
+    }
+
+    if (injectFile && injectVariable) {
+        replaceInFile(injectFile, `${injectVariable}`, documentGenerator.getDocumentationString());
     }
 
     // console.log(documentGenerator.getDocumentation(true));
