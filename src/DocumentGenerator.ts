@@ -1,15 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import { parse, Spec } from "comment-parser";
-import { lstatSync, PathLike } from "node:fs";
-
-export const isDirectory = (path: PathLike) => (lstatSync(path) ? lstatSync(path).isDirectory() : false);
+import { isDirectory } from "./utils";
 
 declare type DocumentGeneratorConfig = {
-    sourcePath: string;
-    apiEndpoint: string;
-    savePath: string;
-    savePathFileName: string;
+    sourcePath: string | null;
+    apiEndpoint: string | null;
+    savePath?: string | null;
+    savePathFileName?: string | null;
 };
 
 declare type DocumentGeneratorDocumentation = {
@@ -73,6 +71,16 @@ export class DocumentGenerator {
     }
 
     private generateDocumentation = () => {
+        if (!this.config.sourcePath) {
+            this.raiseError("No sourcePath in config.");
+            // return;
+        }
+
+        if (!fs.existsSync(this.config.sourcePath)) {
+            this.raiseError("Source directory does not exist");
+            // return;
+        }
+
         for (const file of this.getFiles(this.config.sourcePath)) {
             const fileContent = this.getFileContent(file);
 
@@ -115,7 +123,7 @@ export class DocumentGenerator {
             }
         }
 
-        this.saveDocumentation();
+        // this.saveDocumentation();
 
         console.log("Documentation generated and saved successfully");
     };
@@ -270,13 +278,30 @@ export class DocumentGenerator {
 
     private saveDocumentation(): void {
         // const formatForSave = { data: this.documentation };
+        if (!this.config.savePath || !this.config.savePathFileName) {
+            this.raiseError("No savePath or savePathFileName in config");
+            // return;
+        }
+
+        const dir = path.dirname(this.config.savePath + this.config.savePathFileName);
+        if (!fs.existsSync(dir)) {
+            // fs.mkdirSync(dir, { recursive: true });
+            this.raiseError("Save directory does not exist");
+            // return;
+        }
+
         const formatForSave = this.documentation;
         const filePath = this.config.savePath + this.config.savePathFileName;
 
         fs.writeFileSync(filePath, JSON.stringify(formatForSave, null, 2));
     }
 
-    public getDocumentation(): DocumentGeneratorDocumentation {
-        return this.documentation;
+    public getDocumentation(stringify: boolean = false): DocumentGeneratorDocumentation | string {
+        return stringify ? JSON.stringify(this.documentation) : this.documentation;
+    }
+
+    private raiseError(error: string): never {
+        // console.log(`Error: ${error}`);
+        throw new Error(error);
     }
 }

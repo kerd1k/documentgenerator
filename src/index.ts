@@ -1,21 +1,27 @@
 #!/usr/bin/env node
 
-// import { DocumentGenerator } from "./DocumentGenerator";
+import { DocumentGenerator } from "./DocumentGenerator";
+import { getArgument } from "./utils";
 
-//TODO: parse args + default params
-// const sourcePath = "";
-// const apiEndpoint = "";
-// const savePath = "";
-// const savePathFileName = "";
+// const [, , ...args] = process.argv;
 
-// new DocumentGenerator({
-//     sourcePath,
-//     apiEndpoint,
-//     savePath,
-//     savePathFileName,
-// });
+try {
+    const settings = {
+        sourcePath: getArgument("--source", null),
+        apiEndpoint: getArgument("--endpoint", "/api"),
+        savePath: getArgument("--destination", "./"),
+        savePathFileName: getArgument("--destination", "doc.json"),
+    };
 
-// const args = process.argv;
-const [, , ...args] = process.argv;
+    // console.log(settings);
 
-console.log(`Welcome to The Matrix, Neo! ${args}`);
+    const documentGenerator = new DocumentGenerator(settings);
+
+    // this.saveDocumentation();
+
+    console.log(documentGenerator.getDocumentation(true));
+} catch (error) {
+    console.error(`Error: ${error}`);
+}
+
+console.log(`Welcome to The Matrix, Neo!`);
