@@ -12,4 +12,7 @@ Generate Json from JavaDoc comments
 
 ## TODOS
 
--   Typescript project (build and publish)
+-   Parse parameters
+-   Inject
+-   Create tests
+-   Parameters from config - check for file exists and parse it (args)
