@@ -1,16 +1,32 @@
 {
     "name": "@kerd1k/documentgenerator",
     "version": "1.0.0",
-    "main": "documentgenerator.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsup",
+        "test": "jest",
         "dg": "documentgenerator"
     },
-    "keywords": [],
+    "keywords": [
+        "json",
+        "jsdoc",
+        "javadoc",
+        "comments",
+        "document",
+        "generator"
+    ],
     "author": "",
     "license": "ISC",
     "description": "",
     "bin": {
-        "documentgenerator": "documentgenerator.js"
+        "documentgenerator": "./dist/index.js"
+    },
+    "dependencies": {
+        "comment-parser": "^1.4.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.8.2"
     }
 }
