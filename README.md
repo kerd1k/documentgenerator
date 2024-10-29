@@ -4,14 +4,20 @@ Generate Json from JavaDoc comments
 
 ## Parameters
 
--   type:
-    -   inject - fileName and variableName
-    -   generate files - fileName
--   folderToParse
--   endpointName
+-   --source
+-   --endpoint
+-   --destination
+-   --destinationFileName
+-   --injectFileName
+-   --injectVariable
+
+### example:
+
+`--source=./src/ --endpoint=auth --injectFileName=template.html --inje
+ctVariable="{json}" --destination=./bin/ --destinationFileName=doc.json`
 
 ## TODOS
 
--   Inject
+-   Template file in root folder for save
 -   Create tests
--   Parameters from config - check for file exists and parse it (args)
+-   Parameters from configuration file - check for file exists and parse it (args)

@@ -1,4 +1,4 @@
-import { error } from "node:console";
+import * as fs from "fs";
 import { lstatSync, PathLike } from "node:fs";
 
 export const isDirectory = (path: PathLike) => (lstatSync(path) ? lstatSync(path).isDirectory() : false);
@@ -11,10 +11,23 @@ export const getArgument = (name: string, defaultValue: string | null = null): s
             if (arg.indexOf("=") !== -1) {
                 returnValue = arg.split("=")[1].trim();
             } else {
-                throw Error("Error in providing command line argument");
+                throw new Error("Error in providing command line argument");
             }
         }
     });
 
     return returnValue;
+};
+
+export const replaceInFile = (filePath: string, searchText: string, replaceText: any) => {
+    if (!fs.existsSync(filePath)) {
+        throw new Error("Inject file does not exist");
+    }
+
+    const data = fs.readFileSync(filePath, "utf-8");
+
+    const updatedData = data.replace(new RegExp(searchText, "g"), replaceText);
+    // const updatedData = data.replace(searchText, replaceText);
+
+    fs.writeFileSync(filePath, updatedData, "utf-8");
 };

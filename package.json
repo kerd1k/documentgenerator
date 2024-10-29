@@ -1,6 +1,6 @@
 {
     "name": "@kerd1k/documentgenerator",
-    "version": "0.0.4",
+    "version": "0.0.11",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
@@ -10,7 +10,9 @@
     "scripts": {
         "build": "tsup",
         "test": "jest",
-        "dg": "documentgenerator"
+        "dg": "documentgenerator --source=./src/api --endpoint /auth",
+        "dg-save": "documentgenerator --source=./src/api --endpoint=/auth --destination=./",
+        "dg-inject": "documentgenerator --source=./src/api --endpoint=/auth --injectFileName=./template.html --injectVariable=\"{json}\""
     },
     "repository": {
         "type": "git",

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JSON Viewer</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+            }
+            h1 {
+                text-align: center;
+            }
+            .endpoint {
+                background: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                margin: 20px 0;
+                padding: 20px;
+            }
+            .endpoint h2 {
+                margin: 0 0 10px;
+            }
+            .section {
+                margin-bottom: 15px;
+            }
+            .section-title {
+                font-weight: bold;
+            }
+            pre {
+                background: #f8f8f8;
+                padding: 10px;
+                border-radius: 5px;
+                overflow-x: auto;
+            }
+            code {
+                font-family: monospace;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>API Endpoints</h1>
+        <div id="json-viewer"></div>
+
+        <script>
+            const jsonData = { json };
+
+            function renderJSON(data, parent) {
+                for (const [key, value] of Object.entries(data)) {
+                    const endpointDiv = document.createElement("div");
+                    endpointDiv.className = "endpoint";
+                    const title = document.createElement("h2");
+                    title.innerText = key;
+                    endpointDiv.appendChild(title);
+
+                    for (const [subKey, subValue] of Object.entries(value)) {
+                        const sectionDiv = document.createElement("div");
+                        sectionDiv.className = "section";
+                        const sectionTitle = document.createElement("div");
+                        sectionTitle.className = "section-title";
+                        sectionTitle.innerText = subKey;
+                        sectionDiv.appendChild(sectionTitle);
+
+                        const description = document.createElement("p");
+                        description.innerText = subValue.description || "";
+                        sectionDiv.appendChild(description);
+
+                        if (subValue.method) {
+                            const method = document.createElement("div");
+                            method.innerHTML = `<strong>Method:</strong> <code>${subValue.method}</code>`;
+                            sectionDiv.appendChild(method);
+                        }
+
+                        if (subValue.parameters) {
+                            const paramsTitle = document.createElement("div");
+                            paramsTitle.innerHTML = "<strong>Parameters:</strong>";
+                            sectionDiv.appendChild(paramsTitle);
+                            const paramsList = document.createElement("pre");
+                            paramsList.innerText = JSON.stringify(subValue.parameters, null, 2);
+                            sectionDiv.appendChild(paramsList);
+                        }
+
+                        if (subValue.returns) {
+                            const returnsTitle = document.createElement("div");
+                            returnsTitle.innerHTML = "<strong>Returns:</strong>";
+                            sectionDiv.appendChild(returnsTitle);
+                            const returnsList = document.createElement("pre");
+                            returnsList.innerText = JSON.stringify(subValue.returns, null, 2);
+                            sectionDiv.appendChild(returnsList);
+                        }
+
+                        if (subValue.throws) {
+                            const throwsTitle = document.createElement("div");
+                            throwsTitle.innerHTML = "<strong>Throws:</strong>";
+                            sectionDiv.appendChild(throwsTitle);
+                            const throwsList = document.createElement("pre");
+                            throwsList.innerText = JSON.stringify(subValue.throws, null, 2);
+                            sectionDiv.appendChild(throwsList);
+                        }
+
+                        if (subValue.example) {
+                            const exampleTitle = document.createElement("div");
+                            exampleTitle.innerHTML = "<strong>Example:</strong>";
+                            sectionDiv.appendChild(exampleTitle);
+                            const exampleList = document.createElement("pre");
+                            exampleList.innerText = JSON.stringify(subValue.example, null, 2);
+                            sectionDiv.appendChild(exampleList);
+                        }
+
+                        endpointDiv.appendChild(sectionDiv);
+                    }
+
+                    parent.appendChild(endpointDiv);
+                }
+            }
+
+            const jsonViewer = document.getElementById("json-viewer");
+            renderJSON(jsonData, jsonViewer);
+        </script>
+    </body>
+</html>

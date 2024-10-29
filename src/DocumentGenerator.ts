@@ -6,8 +6,8 @@ import { isDirectory } from "./utils";
 declare type DocumentGeneratorConfig = {
     sourcePath: string | null;
     apiEndpoint: string | null;
-    savePath?: string | null;
-    savePathFileName?: string | null;
+    // savePath?: string | null;
+    // savePathFileName?: string | null;
 };
 
 declare type DocumentGeneratorDocumentation = {
@@ -261,6 +261,7 @@ export class DocumentGenerator {
                 text = text
                     .trim()
                     .replace(/^(\-.)/, "")
+                    .replace('"', "'")
                     .trim();
 
                 break;
@@ -276,14 +277,14 @@ export class DocumentGenerator {
         return text;
     }
 
-    private saveDocumentation(): void {
+    public saveDocumentation(savePath: string, savePathFileName: string): void {
         // const formatForSave = { data: this.documentation };
-        if (!this.config.savePath || !this.config.savePathFileName) {
+        if (!savePath || !savePathFileName) {
             this.raiseError("No savePath or savePathFileName in config");
             // return;
         }
 
-        const dir = path.dirname(this.config.savePath + this.config.savePathFileName);
+        const dir = path.dirname(savePath + savePathFileName);
         if (!fs.existsSync(dir)) {
             // fs.mkdirSync(dir, { recursive: true });
             this.raiseError("Save directory does not exist");
@@ -291,13 +292,17 @@ export class DocumentGenerator {
         }
 
         const formatForSave = this.documentation;
-        const filePath = this.config.savePath + this.config.savePathFileName;
+        const filePath = savePath + savePathFileName;
 
         fs.writeFileSync(filePath, JSON.stringify(formatForSave, null, 2));
     }
 
-    public getDocumentation(stringify: boolean = false): DocumentGeneratorDocumentation | string {
-        return stringify ? JSON.stringify(this.documentation) : this.documentation;
+    public getDocumentation(): DocumentGeneratorDocumentation {
+        return this.documentation;
+    }
+
+    public getDocumentationString(): string {
+        return JSON.stringify(this.documentation);
     }
 
     private raiseError(error: string): never {
