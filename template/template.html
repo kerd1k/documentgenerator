@@ -4,133 +4,432 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>API Documentation</title>
+
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f9;
-                color: #333;
+            :root {
+                --main-blue: #2563eb;
+                --dark-blue: #1e40af;
+                --bg: #f8fafc;
+                --txt: #1e293b;
+                --brd: #e2e8f0;
+
+                --get-color: #22c55e;
+                --post-color: #f59e0b;
+                --put-color: #3b82f6;
+                --del-color: #ef4444;
+            }
+
+            * {
+                box-sizing: border-box;
                 margin: 0;
-                padding: 20px;
+                padding: 0;
             }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
+
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+                color: var(--txt);
+                line-height: 1.5;
+                background: var(--bg);
+                display: flex;
+                min-height: 100vh;
             }
-            .api-group {
-                margin-bottom: 30px;
+
+            .sidebar {
+                width: 250px;
+                background: white;
+                border-right: 1px solid var(--brd);
+                padding: 1rem;
+                height: 100vh;
+                position: fixed;
+                overflow-y: auto;
             }
-            h2 {
-                color: #333;
+
+            .sidebar-nav {
+                list-style: none;
             }
-            .endpoint {
-                background-color: #fff;
-                padding: 20px;
-                margin: 10px 0;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+            .sidebar-nav li {
+                margin: 0.5rem 0;
             }
-            .endpoint h3 {
-                color: #007bff;
+
+            .sidebar-nav a {
+                color: var(--txt);
+                text-decoration: none;
+                display: block;
+                padding: 0.5rem;
+                border-radius: 0.375rem;
+                transition: 0.2s;
             }
-            .method {
-                display: inline-block;
-                padding: 5px 10px;
-                margin-right: 10px;
-                color: #fff;
-                border-radius: 5px;
+
+            .sidebar-nav a:hover {
+                background: var(--bg);
             }
-            .GET {
-                background-color: #28a745;
+
+            .main-content {
+                margin-left: 250px;
+                padding: 2rem;
+                flex: 1;
+                max-width: calc(100% - 250px);
             }
-            .POST {
-                background-color: #17a2b8;
+
+            .api-section {
+                background: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1.5rem;
+                overflow: hidden;
             }
-            .DELETE {
-                background-color: #dc3545;
+
+            .api-header {
+                padding: 1rem;
+                border-bottom: 1px solid var(--brd);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                background: white;
+                transition: background-color 0.2s, box-shadow 0.2s;
             }
-            .section {
-                margin-top: 20px;
+
+            .api-header:hover {
+                background-color: var(--bg);
             }
-            .parameter,
-            .return,
-            .throw {
-                margin-top: 10px;
-                padding: 5px 10px;
-                background-color: #e9ecef;
-                border-radius: 5px;
+
+            .api-method {
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.25rem;
+                font-weight: 600;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                color: white;
+            }
+
+            .api-method.get {
+                background: var(--get-color);
+            }
+
+            .api-method.post {
+                background: var(--post-color);
+            }
+
+            .api-method.put {
+                background: var(--put-color);
+            }
+
+            .api-method.delete {
+                background: var(--del-color);
+            }
+
+            .api-path {
+                font-family: monospace;
+                font-size: 1rem;
+                color: var(--txt);
+            }
+
+            .api-content {
+                background: white;
+                transition: all 0.3s ease;
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                padding: 0 1rem;
+            }
+
+            .api-content.active {
+                max-height: 2000px;
+                opacity: 1;
+                padding: 1rem;
+            }
+
+            /* tables */
+            .params-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 1rem 0;
+            }
+
+            .params-table th,
+            .params-table td {
+                padding: 0.75rem;
+                border: 1px solid var(--brd);
+                text-align: left;
+            }
+
+            .params-table th {
+                background: var(--bg);
+                font-weight: 600;
+            }
+
+            .params-table tr:hover {
+                background-color: var(--bg);
+            }
+
+            .response-example {
+                background: #1e1e1e;
+                color: #d4d4d4;
+                padding: 1rem;
+                border-radius: 0.375rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+                font-family: monospace;
+            }
+
+            .badge {
+                font-size: 0.75rem;
+                padding: 0.125rem 0.375rem;
+                border-radius: 0.25rem;
+                background: #e2e8f0;
+                color: #475569;
+                transition: transform 0.2s;
+            }
+
+            .badge:hover {
+                transform: scale(1.05);
+            }
+
+            .badge.error {
+                background: #fee2e2;
+                color: #dc2626;
             }
         </style>
     </head>
+
     <body>
-        <div class="container">
-            <h1>API Documentation</h1>
-            <!-- JSON data is looped and each endpoint rendered -->
-            <div class="api-group">
-                <h2>API Endpoints</h2>
-                <!-- Render each API group -->
-                <div id="api-container"></div>
-            </div>
-        </div>
+        <nav class="sidebar">
+            <h2 style="margin-bottom: 1rem">API Endpoints</h2>
+            <ul class="sidebar-nav" id="sidebar-nav"></ul>
+        </nav>
+
+        <main class="main-content" id="main-content"></main>
 
         <script>
-            const apiData = {{docjson}};
+                const jsonData = {{docjson}};
 
-            function createEndpointElement(endpoint, details) {
-                const { handler, fullPath, description, method, parameters, returns, throws, example } = details;
-                return `
-                    <div class="endpoint">
-                        <h3>${handler}</h3>
-                        <div class="method ${method}">${method}</div>
-                        <div><strong>Full Path:</strong> ${fullPath}</div>
-                        <div><strong>Description:</strong> ${description}</div>
+                function groupEndpoints(data) {
+                    let groups = {};
 
-                        ${parameters && parameters.length > 0 ? `
-                        <div class="section"><strong>Parameters:</strong>
-                            ${parameters.map(param => `
-                                <div class="parameter"><strong>${param.name}:</strong> ${param.type} - ${param.description}</div>
-                            `).join('')}
-                        </div>` : ''}
+                    for (let [path, endpoints] of Object.entries(data)) {
+                        let group = path.split('/').slice(0, 3).join('/');
 
-                        ${returns && returns.length > 0 ? `
-                        <div class="section"><strong>Returns:</strong>
-                            ${returns.map(ret => `
-                                <div class="return"><strong>${ret.name}:</strong> ${ret.type} - ${ret.description}</div>
-                            `).join('')}
-                        </div>` : ''}
+                        if (!groups[group]) groups[group] = {};
 
-                        ${throws && throws.length > 0 ? `
-                        <div class="section"><strong>Throws:</strong>
-                            ${throws.map(thr => `
-                                <div class="throw"><strong>${thr.name}:</strong> ${thr.type} - ${thr.description}</div>
-                            `).join('')}
-                        </div>` : ''}
+                        if (path === group) {
+                            Object.assign(groups[group], endpoints);
+                        } else {
+                            let subPath = path.slice(group.length);
+                            groups[group][subPath] = endpoints;
+                        }
+                    }
 
-                        ${example && example.length > 0 ? `
-                        <div class="section"><strong>Examples:</strong>
-                            ${example.map(ex => `<div class="example">${ex}</div>`).join('')}
-                        </div>` : ''}
-                    </div>
-                `;
-            }
+                    return groups;
+                }
 
-            function renderAPI(apiData) {
-                const apiContainer = document.getElementById("api-container");
-                Object.keys(apiData).forEach(basePath => {
-                    const groupDiv = document.createElement("div");
-                    groupDiv.classList.add("api-group");
+                function makeSidebar() {
+                    let nav = document.getElementById('sidebar-nav');
+                    let groups = groupEndpoints(jsonData);
 
-                    groupDiv.innerHTML = `<h3>${basePath}</h3>`;
-                    Object.keys(apiData[basePath]).forEach(endpoint => {
-                        const endpointElement = createEndpointElement(endpoint, apiData[basePath][endpoint]);
-                        groupDiv.innerHTML += endpointElement;
-                    });
+                    for (let groupPath of Object.keys(groups)) {
+                        let name = groupPath.split('/').filter(Boolean).pop() || 'Root';
+                        let li = document.createElement('li');
+                        li.innerHTML = `<a href="#${groupPath}">${name.toUpperCase()}</a>`;
+                        nav.appendChild(li);
+                    }
+                }
 
-                    apiContainer.appendChild(groupDiv);
-                });
-            }
+                // main render
+                function renderContent() {
+                    let main = document.getElementById('main-content');
+                    let groups = groupEndpoints(jsonData);
 
-            // Render API Documentation
-            renderAPI(apiData);
+                    for (let [groupPath, endpoints] of Object.entries(groups)) {
+                        let section = document.createElement('section');
+                        section.id = groupPath;
+
+                        let name = groupPath.split('/').filter(Boolean).pop() || 'Root';
+                        let title = document.createElement('h2');
+                        title.textContent = name.toUpperCase();
+                        title.style.marginBottom = '1rem';
+                        section.appendChild(title);
+
+                        for (let [subPath, endpoint] of Object.entries(endpoints)) {
+                            if (typeof endpoint !== 'object' || !endpoint.method) continue;
+
+                            let apiBlock = document.createElement('div');
+                            apiBlock.className = 'api-section';
+
+                            let header = document.createElement('div');
+                            header.className = 'api-header';
+                            header.innerHTML = `
+                                <span class="api-method ${endpoint.method.toLowerCase()}">${endpoint.method}</span>
+                                <span class="api-path">${endpoint.fullPath || (groupPath + subPath)}</span>
+                            `;
+
+                            let content = document.createElement('div');
+                            content.className = 'api-content';
+
+                            if (endpoint.description) {
+                                let desc = document.createElement('div');
+                                desc.style.marginBottom = '1rem';
+                                desc.textContent = endpoint.description;
+                                content.appendChild(desc);
+                            }
+
+                            // headers
+                            if (endpoint.headers) {
+                                content.appendChild(makeHeadersTable(endpoint.headers));
+                            }
+                            // table
+                            if (endpoint.parameters?.length) {
+                                content.appendChild(makeParamsTable(endpoint.parameters));
+                            }
+
+                            // table
+                            if (endpoint.returns?.length) {
+                                content.appendChild(makeReturnsTable(endpoint.returns));
+                            }
+
+                            // table
+                            if (endpoint.throws?.length) {
+                                content.appendChild(makeErrorsTable(endpoint.throws));
+                            }
+
+                            // examples
+                            if (endpoint.example?.length) {
+                                let exTitle = document.createElement('h3');
+                                exTitle.textContent = 'Examples';
+                                exTitle.style.marginTop = '1rem';
+                                content.appendChild(exTitle);
+
+                                endpoint.example.forEach(ex => {
+                                    let code = document.createElement('div');
+                                    code.className = 'response-example';
+                                    code.textContent = ex;
+                                    content.appendChild(code);
+                                });
+                            }
+
+                            apiBlock.appendChild(header);
+                            apiBlock.appendChild(content);
+                            section.appendChild(apiBlock);
+
+                            header.onclick = () => content.classList.toggle('active');
+                        }
+
+                        main.appendChild(section);
+                    }
+                }
+
+                function makeParamsTable(params) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                    ${params.some(p => p.default) ? '<th>Default</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${params.map(p => `
+                                    <tr>
+                                        <td>${p.name}</td>
+                                        <td><code>${p.type}</code></td>
+                                        <td>${p.optional ? '—' : '✓'}</td>
+                                        <td>${p.description}</td>
+                                        ${params.some(p => p.default) ?
+                            `<td>${p.default || '—'}</td>` : ''}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                function makeHeadersTable(headers) {
+                    if (!headers || !headers.length) return null;
+
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                <h3 style="margin-top:1rem">Headers</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${headers.map(header => `
+                            <tr>
+                                <td><code>${header.name}</code></td>
+                                <td>${header.description}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+                    return div;
+                }
+
+                function makeReturnsTable(returns) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Returns</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${returns.map(r => `
+                                    <tr>
+                                        <td>${r.name}</td>
+                                        <td><code>${r.type}</code></td>
+                                        <td>${r.description}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                function makeErrorsTable(errors) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Errors</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Error</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${errors.map(e => `
+                                    <tr>
+                                        <td>${e.name}</td>
+                                        <td><span class="badge error">${e.type}</span></td>
+                                        <td>${e.description}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                makeSidebar();
+                renderContent();
         </script>
     </body>
 </html>
