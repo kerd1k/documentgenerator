@@ -3,122 +3,134 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>API Endpoints Viewer</title>
+        <title>API Documentation</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
+                background-color: #f4f4f9;
+                color: #333;
                 margin: 0;
                 padding: 20px;
             }
-            h1 {
-                text-align: center;
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            .api-group {
+                margin-bottom: 30px;
+            }
+            h2 {
+                color: #333;
             }
             .endpoint {
-                background: #fff;
-                border-radius: 5px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                margin: 20px 0;
+                background-color: #fff;
                 padding: 20px;
+                margin: 10px 0;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-            .endpoint h2 {
-                margin: 0 0 10px;
+            .endpoint h3 {
+                color: #007bff;
+            }
+            .method {
+                display: inline-block;
+                padding: 5px 10px;
+                margin-right: 10px;
+                color: #fff;
+                border-radius: 5px;
+            }
+            .GET {
+                background-color: #28a745;
+            }
+            .POST {
+                background-color: #17a2b8;
+            }
+            .DELETE {
+                background-color: #dc3545;
             }
             .section {
-                margin-bottom: 15px;
+                margin-top: 20px;
             }
-            .section-title {
-                font-weight: bold;
-            }
-            pre {
-                background: #f8f8f8;
-                padding: 10px;
+            .parameter,
+            .return,
+            .throw {
+                margin-top: 10px;
+                padding: 5px 10px;
+                background-color: #e9ecef;
                 border-radius: 5px;
-                overflow-x: auto;
-            }
-            code {
-                font-family: monospace;
             }
         </style>
     </head>
     <body>
-        <h1>API Endpoints</h1>
-        <div id="json-viewer"></div>
+        <div class="container">
+            <h1>API Documentation</h1>
+            <!-- JSON data is looped and each endpoint rendered -->
+            <div class="api-group">
+                <h2>API Endpoints</h2>
+                <!-- Render each API group -->
+                <div id="api-container"></div>
+            </div>
+        </div>
 
         <script>
-            const jsonData = {{docjson}};
+            const apiData = {{docjson}};
 
-            function renderJSON(data, parent) {
-                for (const [key, value] of Object.entries(data)) {
-                    const endpointDiv = document.createElement("div");
-                    endpointDiv.className = "endpoint";
-                    const title = document.createElement("h2");
-                    title.innerText = key;
-                    endpointDiv.appendChild(title);
+            function createEndpointElement(endpoint, details) {
+                const { handler, fullPath, description, method, parameters, returns, throws, example } = details;
+                return `
+                    <div class="endpoint">
+                        <h3>${handler}</h3>
+                        <div class="method ${method}">${method}</div>
+                        <div><strong>Full Path:</strong> ${fullPath}</div>
+                        <div><strong>Description:</strong> ${description}</div>
 
-                    for (const [subKey, subValue] of Object.entries(value)) {
-                        const sectionDiv = document.createElement("div");
-                        sectionDiv.className = "section";
-                        const sectionTitle = document.createElement("div");
-                        sectionTitle.className = "section-title";
-                        sectionTitle.innerText = subKey;
-                        sectionDiv.appendChild(sectionTitle);
+                        ${parameters && parameters.length > 0 ? `
+                        <div class="section"><strong>Parameters:</strong>
+                            ${parameters.map(param => `
+                                <div class="parameter"><strong>${param.name}:</strong> ${param.type} - ${param.description}</div>
+                            `).join('')}
+                        </div>` : ''}
 
-                        const description = document.createElement("p");
-                        description.innerText = subValue.description || "";
-                        sectionDiv.appendChild(description);
+                        ${returns && returns.length > 0 ? `
+                        <div class="section"><strong>Returns:</strong>
+                            ${returns.map(ret => `
+                                <div class="return"><strong>${ret.name}:</strong> ${ret.type} - ${ret.description}</div>
+                            `).join('')}
+                        </div>` : ''}
 
-                        if (subValue.method) {
-                            const method = document.createElement("div");
-                            method.innerHTML = `<strong>Method:</strong> <code>${subValue.method}</code>`;
-                            sectionDiv.appendChild(method);
-                        }
+                        ${throws && throws.length > 0 ? `
+                        <div class="section"><strong>Throws:</strong>
+                            ${throws.map(thr => `
+                                <div class="throw"><strong>${thr.name}:</strong> ${thr.type} - ${thr.description}</div>
+                            `).join('')}
+                        </div>` : ''}
 
-                        if (subValue.parameters) {
-                            const paramsTitle = document.createElement("div");
-                            paramsTitle.innerHTML = "<strong>Parameters:</strong>";
-                            sectionDiv.appendChild(paramsTitle);
-                            const paramsList = document.createElement("pre");
-                            paramsList.innerText = JSON.stringify(subValue.parameters, null, 2);
-                            sectionDiv.appendChild(paramsList);
-                        }
-
-                        if (subValue.returns) {
-                            const returnsTitle = document.createElement("div");
-                            returnsTitle.innerHTML = "<strong>Returns:</strong>";
-                            sectionDiv.appendChild(returnsTitle);
-                            const returnsList = document.createElement("pre");
-                            returnsList.innerText = JSON.stringify(subValue.returns, null, 2);
-                            sectionDiv.appendChild(returnsList);
-                        }
-
-                        if (subValue.throws) {
-                            const throwsTitle = document.createElement("div");
-                            throwsTitle.innerHTML = "<strong>Throws:</strong>";
-                            sectionDiv.appendChild(throwsTitle);
-                            const throwsList = document.createElement("pre");
-                            throwsList.innerText = JSON.stringify(subValue.throws, null, 2);
-                            sectionDiv.appendChild(throwsList);
-                        }
-
-                        if (subValue.example) {
-                            const exampleTitle = document.createElement("div");
-                            exampleTitle.innerHTML = "<strong>Example:</strong>";
-                            sectionDiv.appendChild(exampleTitle);
-                            const exampleList = document.createElement("pre");
-                            exampleList.innerText = JSON.stringify(subValue.example, null, 2);
-                            sectionDiv.appendChild(exampleList);
-                        }
-
-                        endpointDiv.appendChild(sectionDiv);
-                    }
-
-                    parent.appendChild(endpointDiv);
-                }
+                        ${example && example.length > 0 ? `
+                        <div class="section"><strong>Examples:</strong>
+                            ${example.map(ex => `<div class="example">${ex}</div>`).join('')}
+                        </div>` : ''}
+                    </div>
+                `;
             }
 
-            const jsonViewer = document.getElementById("json-viewer");
-            renderJSON(jsonData, jsonViewer);
+            function renderAPI(apiData) {
+                const apiContainer = document.getElementById("api-container");
+                Object.keys(apiData).forEach(basePath => {
+                    const groupDiv = document.createElement("div");
+                    groupDiv.classList.add("api-group");
+
+                    groupDiv.innerHTML = `<h3>${basePath}</h3>`;
+                    Object.keys(apiData[basePath]).forEach(endpoint => {
+                        const endpointElement = createEndpointElement(endpoint, apiData[basePath][endpoint]);
+                        groupDiv.innerHTML += endpointElement;
+                    });
+
+                    apiContainer.appendChild(groupDiv);
+                });
+            }
+
+            // Render API Documentation
+            renderAPI(apiData);
         </script>
     </body>
 </html>

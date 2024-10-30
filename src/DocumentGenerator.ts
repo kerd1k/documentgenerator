@@ -24,19 +24,23 @@ declare type DocumentGeneratorDocumentationEndpoint = {
 
     description?: string;
     parameters: DocumentGeneratorDocumentationEndpointParameter[];
-    returns?: Omit<DocumentGeneratorDocumentationEndpointParameter, "optional" | "default">[];
-    // returns?: DocumentGeneratorDocumentationEndpointParameter[];
+    headers?: Omit<DocumentGeneratorDocumentationEndpointDefaultParameter, "type">[];
+    // returns?: Omit<DocumentGeneratorDocumentationEndpointParameter, "optional" | "default">[];
+    returns?: DocumentGeneratorDocumentationEndpointDefaultParameter[];
     example?: string[];
-    throws?: Omit<DocumentGeneratorDocumentationEndpointParameter, "optional" | "default">[];
+    throws?: DocumentGeneratorDocumentationEndpointDefaultParameter[];
 };
 
-declare type DocumentGeneratorDocumentationEndpointParameter = {
+declare type DocumentGeneratorDocumentationEndpointDefaultParameter = {
     name: string;
     type: string;
     description: string;
+};
+
+declare type DocumentGeneratorDocumentationEndpointParameter = {
     optional?: boolean;
     default?: string;
-};
+} & DocumentGeneratorDocumentationEndpointDefaultParameter;
 
 export class DocumentGenerator {
     private documentation: DocumentGeneratorDocumentation = {};
@@ -114,6 +118,7 @@ export class DocumentGenerator {
                     description: "",
                     method: "GET",
                     parameters: [],
+                    // headers: [],
                 };
 
                 this.documentation[nodeEndpoint][endpointName] = this.parseEndPointComments(
@@ -227,6 +232,18 @@ export class DocumentGenerator {
                 endpoint.returns.push({
                     name: this.tagModifications(tag.name, "name"),
                     type: tag.type,
+                    description: this.tagModifications(tag.description),
+                    // optional: tag.optional,
+                });
+                break;
+            case "header":
+                if (!endpoint.headers) {
+                    endpoint.headers = [];
+                }
+
+                endpoint.headers.push({
+                    name: this.tagModifications(tag.name, "name"),
+                    // type: tag.type,
                     description: this.tagModifications(tag.description),
                     // optional: tag.optional,
                 });
