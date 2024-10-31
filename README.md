@@ -188,5 +188,6 @@ Copy template, inject in it and save to file:
 
 ## TODOS
 
+-   Comments before endpoints - regex
 -   Create tests
 -   Parameters from configuration file - check for file exists and parse it (args)

@@ -103,6 +103,7 @@ export class DocumentGenerator {
             const endpoints = fileContent.matchAll(regex);
 
             for (const match of endpoints) {
+                // console.log(match[0]);
                 const endpointName: string = match[1];
                 const handler = match[2];
                 const ignoreInterceptor = match[3];
