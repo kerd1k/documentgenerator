@@ -17,13 +17,14 @@ declare type DocumentGeneratorDocumentation = {
 };
 
 declare type DocumentGeneratorDocumentationEndpoint = {
+    private: boolean;
     handler: string;
     fullPath: string;
     method: string;
     ignoreInterceptor?: string;
 
     description?: string;
-    parameters: DocumentGeneratorDocumentationEndpointParameter[];
+    parameters?: DocumentGeneratorDocumentationEndpointParameter[];
     headers?: Omit<DocumentGeneratorDocumentationEndpointDefaultParameter, "type">[];
     // returns?: Omit<DocumentGeneratorDocumentationEndpointParameter, "optional" | "default">[];
     returns?: DocumentGeneratorDocumentationEndpointDefaultParameter[];
@@ -119,19 +120,21 @@ export class DocumentGenerator {
                     description: "",
                     method: "GET",
                     parameters: [],
+                    private: false,
                     // headers: [],
                 };
 
-                this.documentation[nodeEndpoint][endpointName] = this.parseEndPointComments(
-                    this.getCommentsByEndpoint(fileContent, handler),
-                    endpoint
-                );
+                this.parseEndPointComments(this.getCommentsByEndpoint(fileContent, handler), endpoint);
+
+                if (endpoint.private !== true) {
+                    this.documentation[nodeEndpoint][endpointName] = endpoint;
+                }
             }
         }
 
         // this.saveDocumentation();
 
-        console.log("Documentation generated and saved successfully");
+        console.log("Documentation generated successfully");
     };
 
     private getCommentsByEndpoint(fileContent: string, handler: string): string {
@@ -204,6 +207,10 @@ export class DocumentGenerator {
     private tagToEndpoint(tag: Spec, endpoint: DocumentGeneratorDocumentationEndpoint): DocumentGeneratorDocumentationEndpoint {
         switch (tag.tag) {
             case "param":
+                if (!endpoint.parameters) {
+                    endpoint.parameters = [];
+                }
+
                 endpoint.parameters.push({
                     name: this.tagModifications(tag.name, "name"),
                     type: tag.type,
@@ -217,6 +224,9 @@ export class DocumentGenerator {
                 break;
             case "method":
                 endpoint.method = tag.name;
+                break;
+            case "private":
+                endpoint.private = true;
                 break;
             case "example":
                 if (!endpoint.example) {
