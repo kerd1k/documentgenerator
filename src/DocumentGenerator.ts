@@ -99,15 +99,15 @@ export class DocumentGenerator {
             const nodeEndpoint = this.config.apiEndpoint + (baseEndpoint[1] ? "/" + baseEndpoint[1] : "");
 
             // get all endpoints
-            const regex = /{\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*}/g;
+            // const regex = /{\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*}/g; //with commented endpoints - included
+            const regex = /(?<!\/\/\s*)({\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*})/g; //commented endpoints - excluded
 
             const endpoints = fileContent.matchAll(regex);
 
             for (const match of endpoints) {
-                // console.log(match[0]);
-                const endpointName: string = match[1];
-                const handler = match[2];
-                const ignoreInterceptor = match[3];
+                const endpointName: string = match[2];
+                const handler = match[3];
+                const ignoreInterceptor = match[4];
 
                 if (!this.documentation.hasOwnProperty(nodeEndpoint)) {
                     this.documentation[nodeEndpoint] = {};

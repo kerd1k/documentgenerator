@@ -11,7 +11,7 @@ export class Example extends BaseEndpoint {
             // { endpoint: "test", handler: this.test },
             { endpoint: "testDocs", handler: this.testDocs },
             { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
-            { endpoint: "testPrivate", handler: this.testDocsPrivate, ignoreInterceptor: true },
+            { endpoint: "testPrivate", handler: this.testDocsPrivate },
         ]);
     }
 
