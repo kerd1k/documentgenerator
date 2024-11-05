@@ -7,12 +7,13 @@ export const getArgument = (name: string, defaultValue: string | null = null): s
     let returnValue = defaultValue;
 
     process.argv.slice(2).forEach((arg) => {
-        if (arg.indexOf(name) !== -1) {
-            if (arg.indexOf("=") !== -1) {
-                returnValue = arg.split("=")[1].trim();
-            } else {
-                throw new Error("Error in providing command line argument");
-            }
+        // if (arg.indexOf(name) !== -1) {
+        if (arg.indexOf(name + "=") === 0) {
+            // if (arg.indexOf("=") !== -1) {
+            returnValue = arg.split("=")[1].trim();
+            // } else {
+            // throw new Error("Error in providing command line argument");
+            // }
         }
     });
 

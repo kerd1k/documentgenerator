@@ -4,28 +4,33 @@ import { DocumentGenerator } from "./DocumentGenerator";
 import { copyFile, getArgument, replaceInFile } from "./utils";
 
 try {
-    const destination = getArgument("--destination", null);
-    const injectFile = getArgument("--inject", null);
-    const injectVariable = getArgument("--injectVariable", "{{docjson}}");
-    const template = getArgument("--template", null);
+    const config = {
+        source: getArgument("--source", null),
+        endpoint: getArgument("--endpoint", "/api"),
+        destination: getArgument("--destination", null),
+        inject: getArgument("--inject", null),
+        injectVariable: getArgument("--injectVariable", "{{docjson}}"),
+        template: getArgument("--template", null),
+        templatePath: getArgument("--templatePath", `${__dirname}/template.html`),
+    };
 
     const documentGeneratorConfig = {
-        sourcePath: getArgument("--source", null),
-        apiEndpoint: getArgument("--endpoint", "/api"),
+        sourcePath: config.source,
+        apiEndpoint: config.endpoint,
     };
 
     const documentGenerator = new DocumentGenerator(documentGeneratorConfig);
 
-    if (destination) {
-        documentGenerator.saveDocumentation(destination);
+    if (config.destination) {
+        documentGenerator.saveDocumentation(config.destination);
     }
 
-    if (template) {
-        copyFile(`${__dirname}/template.html`, template);
+    if (config.template && config.templatePath) {
+        copyFile(config.templatePath, config.template);
     }
 
-    if (injectFile && injectVariable) {
-        replaceInFile(injectFile, `${injectVariable}`, documentGenerator.getDocumentationString());
+    if (config.inject && config.injectVariable) {
+        replaceInFile(config.inject, `${config.injectVariable}`, documentGenerator.getDocumentationString());
     }
 } catch (error) {
     console.error(`Error: ${error}`);

@@ -1,6 +1,6 @@
 {
     "name": "@kerd1k/documentgenerator",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
@@ -10,9 +10,8 @@
     "scripts": {
         "build": "tsup",
         "test": "jest",
-        "dg": "documentgenerator --source=./src/api --endpoint /auth",
-        "dg-save": "documentgenerator --source=./src/api --endpoint=/auth --destination=./",
-        "dg-inject": "documentgenerator --source=./src/api --endpoint=/auth --injectFileName=./template.html --injectVariable=\"{json}\""
+        "start:dev": "ts-node ./src/index.ts --source=./example/api --endpoint=/auth --destination=./example/doc.json --template=./example/documentation.html --templatePath=./template/template.html --inject=./example/documentation.html",
+        "dg": "documentgenerator --source=./src/api --endpoint=/auth"
     },
     "repository": {
         "type": "git",
@@ -41,6 +40,7 @@
     },
     "devDependencies": {
         "@types/node": "^22.8.2",
+        "ts-node": "^10.9.2",
         "tsup": "^8.3.5",
         "typescript": "^5.6.3"
     }

@@ -11,6 +11,7 @@ export class Example extends BaseEndpoint {
             // { endpoint: "test", handler: this.test },
             { endpoint: "testDocs", handler: this.testDocs },
             { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
+            { endpoint: "testPrivate", handler: this.testDocsPrivate, ignoreInterceptor: true },
         ]);
     }
 
@@ -87,6 +88,43 @@ export class Example extends BaseEndpoint {
     * @description - TestDocs route
 	 */
     async testDocs(req: HTTPRequestVO): Promise<TransferPacketVO<any>> {
+        if (req.method !== "GET") {
+            return {
+                error: {
+                    ...Errors.TEST_ERROR,
+                    httpStatus: 405,
+                },
+            };
+        }
+
+        // req.data  - parsed request data
+        if (!Validator.validateObject(["test"], req.data)) {
+            return { error: Errors.WRONG_REQUEST };
+        }
+
+        // Emit request through GD
+        const result = await GD.REQ_EXAMPLE_TEST.request(req.data.test);
+
+        return { data: result };
+    }
+
+    /**
+    * Test endpoint with private method - need to ignore
+    *
+    * @class - (synonyms: @constructor)
+    * @private
+    * @param {string} employee.name - The name of the employee.
+    * @param {string} employee.department - The employee's department.
+    * @param {string} [somebody=John Doe] Somebody's name.
+    * @param {(string|string[])} [somebody=John Doe] - Somebody's name, or an array of names.~
+    * @throws {DivideByZero} - Argument x must be non-zero.
+    * @returns {TransferPacketVO<any>} - response object
+    * @example 
+    * http://localhost:8015/api/v1/example/test - will return error
+
+    * @description - TestDocs route
+	 */
+    async testDocsPrivate(req: HTTPRequestVO): Promise<TransferPacketVO<any>> {
         if (req.method !== "GET") {
             return {
                 error: {

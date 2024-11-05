@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>API Documentation</title>
+
+        <style>
+            :root {
+                --main-blue: #2563eb;
+                --dark-blue: #1e40af;
+                --bg: #f8fafc;
+                --txt: #1e293b;
+                --brd: #e2e8f0;
+
+                --get-color: #22c55e;
+                --post-color: #f59e0b;
+                --put-color: #3b82f6;
+                --del-color: #ef4444;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+                color: var(--txt);
+                line-height: 1.5;
+                background: var(--bg);
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .sidebar {
+                width: 250px;
+                background: white;
+                border-right: 1px solid var(--brd);
+                padding: 1rem;
+                height: 100vh;
+                position: fixed;
+                overflow-y: auto;
+            }
+
+            .sidebar-nav {
+                list-style: none;
+            }
+
+            .sidebar-nav li {
+                margin: 0.5rem 0;
+            }
+
+            .sidebar-nav a {
+                color: var(--txt);
+                text-decoration: none;
+                display: block;
+                padding: 0.5rem;
+                border-radius: 0.375rem;
+                transition: 0.2s;
+            }
+
+            .sidebar-nav a:hover {
+                background: var(--bg);
+            }
+
+            .main-content {
+                margin-left: 250px;
+                padding: 2rem;
+                flex: 1;
+                max-width: calc(100% - 250px);
+            }
+
+            .api-section {
+                background: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1.5rem;
+                overflow: hidden;
+            }
+
+            .api-header {
+                padding: 1rem;
+                border-bottom: 1px solid var(--brd);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                background: white;
+                transition: background-color 0.2s, box-shadow 0.2s;
+            }
+
+            .api-header:hover {
+                background-color: var(--bg);
+            }
+
+            .api-method {
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.25rem;
+                font-weight: 600;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                color: white;
+            }
+
+            .api-method.get {
+                background: var(--get-color);
+            }
+
+            .api-method.post {
+                background: var(--post-color);
+            }
+
+            .api-method.put {
+                background: var(--put-color);
+            }
+
+            .api-method.delete {
+                background: var(--del-color);
+            }
+
+            .api-path {
+                font-family: monospace;
+                font-size: 1rem;
+                color: var(--txt);
+            }
+
+            .api-content {
+                background: white;
+                transition: all 0.3s ease;
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                padding: 0 1rem;
+            }
+
+            .api-content.active {
+                max-height: 2000px;
+                opacity: 1;
+                padding: 1rem;
+            }
+
+            /* tables */
+            .params-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 1rem 0;
+            }
+
+            .params-table th,
+            .params-table td {
+                padding: 0.75rem;
+                border: 1px solid var(--brd);
+                text-align: left;
+            }
+
+            .params-table th {
+                background: var(--bg);
+                font-weight: 600;
+            }
+
+            .params-table tr:hover {
+                background-color: var(--bg);
+            }
+
+            .response-example {
+                background: #1e1e1e;
+                color: #d4d4d4;
+                padding: 1rem;
+                border-radius: 0.375rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+                font-family: monospace;
+            }
+
+            .badge {
+                font-size: 0.75rem;
+                padding: 0.125rem 0.375rem;
+                border-radius: 0.25rem;
+                background: #e2e8f0;
+                color: #475569;
+                transition: transform 0.2s;
+            }
+
+            .badge:hover {
+                transform: scale(1.05);
+            }
+
+            .badge.error {
+                background: #fee2e2;
+                color: #dc2626;
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="sidebar">
+            <h2 style="margin-bottom: 1rem">API Endpoints</h2>
+            <ul class="sidebar-nav" id="sidebar-nav"></ul>
+        </nav>
+
+        <main class="main-content" id="main-content"></main>
+
+        <script>
+                const jsonData = {"/auth/example":{"test":{"handler":"test","fullPath":"/auth/example/test","description":"Test route for /api/v1/example/test","method":"GET","parameters":[{"name":"req","type":"","description":"Request object, contains all nessessary data","optional":false}],"private":false,"returns":[{"name":"","type":"TransferPacketVO<any>","description":"response object"}],"example":["http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\n        http://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\n        http://localhost:8015/api/v1/example/test - will return error"]},"testDocs":{"handler":"testDocs","fullPath":"/auth/example/testDocs","description":"TestDocs route","method":"GET","parameters":[{"name":"employee","type":"Object","description":"The employee who is responsible for the project.","optional":false},{"name":"employee.name","type":"string","description":"The name of the employee.","optional":false},{"name":"employee.department","type":"string","description":"The employee's department.","optional":false},{"name":"employees","type":"Object[]","description":"The employees who are responsible for the project.","optional":false},{"name":"employees[].name","type":"string","description":"The name of an employee.","optional":false},{"name":"employees[].department","type":"string","description":"The employee's department.","optional":false},{"name":"somebody","type":"string","description":"Somebody's name.","optional":false},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true,"default":"John Doe"},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true,"default":"John Doe"},{"name":"somebody","type":"(string|string[])","description":"Somebody's name, or an array of names.","optional":true,"default":"John Doe"}],"private":false,"throws":[{"name":"","type":"InvalidArgumentException","description":""},{"name":"","type":"","description":"Will throw an error if the argument is null."},{"name":"","type":"DivideByZero","description":"Argument x must be non-zero."}],"returns":[{"name":"","type":"TransferPacketVO<any>","description":"response object"}],"example":["// returns 2\nglobalNS.method1(5, 10);","// returns 3\nglobalNS.method(5, 15);","http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"]},"testDocumentation":{"handler":"testDocs","ignoreInterceptor":"true","fullPath":"/auth/example/testDocumentation","description":"TestDocs route","method":"GET","parameters":[{"name":"employee","type":"Object","description":"The employee who is responsible for the project.","optional":false},{"name":"employee.name","type":"string","description":"The name of the employee.","optional":false},{"name":"employee.department","type":"string","description":"The employee's department.","optional":false},{"name":"employees","type":"Object[]","description":"The employees who are responsible for the project.","optional":false},{"name":"employees[].name","type":"string","description":"The name of an employee.","optional":false},{"name":"employees[].department","type":"string","description":"The employee's department.","optional":false},{"name":"somebody","type":"string","description":"Somebody's name.","optional":false},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true,"default":"John Doe"},{"name":"somebody","type":"string","description":"Somebody's name.","optional":true,"default":"John Doe"},{"name":"somebody","type":"(string|string[])","description":"Somebody's name, or an array of names.","optional":true,"default":"John Doe"}],"private":false,"throws":[{"name":"","type":"InvalidArgumentException","description":""},{"name":"","type":"","description":"Will throw an error if the argument is null."},{"name":"","type":"DivideByZero","description":"Argument x must be non-zero."}],"returns":[{"name":"","type":"TransferPacketVO<any>","description":"response object"}],"example":["// returns 2\nglobalNS.method1(5, 10);","// returns 3\nglobalNS.method(5, 15);","http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"]}}};
+
+                function groupEndpoints(data) {
+                    let groups = {};
+
+                    for (let [path, endpoints] of Object.entries(data)) {
+                        let group = path.split('/').slice(0, 3).join('/');
+
+                        if (!groups[group]) groups[group] = {};
+
+                        if (path === group) {
+                            Object.assign(groups[group], endpoints);
+                        } else {
+                            let subPath = path.slice(group.length);
+                            groups[group][subPath] = endpoints;
+                        }
+                    }
+
+                    return groups;
+                }
+
+                function makeSidebar() {
+                    let nav = document.getElementById('sidebar-nav');
+                    let groups = groupEndpoints(jsonData);
+
+                    for (let groupPath of Object.keys(groups)) {
+                        let name = groupPath.split('/').filter(Boolean).pop() || 'Root';
+                        let li = document.createElement('li');
+                        li.innerHTML = `<a href="#${groupPath}">${name.toUpperCase()}</a>`;
+                        nav.appendChild(li);
+                    }
+                }
+
+                // main render
+                function renderContent() {
+                    let main = document.getElementById('main-content');
+                    let groups = groupEndpoints(jsonData);
+
+                    for (let [groupPath, endpoints] of Object.entries(groups)) {
+                        let section = document.createElement('section');
+                        section.id = groupPath;
+
+                        let name = groupPath.split('/').filter(Boolean).pop() || 'Root';
+                        let title = document.createElement('h2');
+                        title.textContent = name.toUpperCase();
+                        title.style.marginBottom = '1rem';
+                        section.appendChild(title);
+
+                        for (let [subPath, endpoint] of Object.entries(endpoints)) {
+                            if (typeof endpoint !== 'object' || !endpoint.method) continue;
+
+                            let apiBlock = document.createElement('div');
+                            apiBlock.className = 'api-section';
+
+                            let header = document.createElement('div');
+                            header.className = 'api-header';
+                            header.innerHTML = `
+                                <span class="api-method ${endpoint.method.toLowerCase()}">${endpoint.method}</span>
+                                <span class="api-path">${endpoint.fullPath || (groupPath + subPath)}</span>
+                            `;
+
+                            let content = document.createElement('div');
+                            content.className = 'api-content';
+
+                            if (endpoint.description) {
+                                let desc = document.createElement('div');
+                                desc.style.marginBottom = '1rem';
+                                desc.textContent = endpoint.description;
+                                content.appendChild(desc);
+                            }
+
+                            // headers
+                            if (endpoint.headers) {
+                                content.appendChild(makeHeadersTable(endpoint.headers));
+                            }
+                            // table
+                            if (endpoint.parameters?.length) {
+                                content.appendChild(makeParamsTable(endpoint.parameters));
+                            }
+
+                            // table
+                            if (endpoint.returns?.length) {
+                                content.appendChild(makeReturnsTable(endpoint.returns));
+                            }
+
+                            // table
+                            if (endpoint.throws?.length) {
+                                content.appendChild(makeErrorsTable(endpoint.throws));
+                            }
+
+                            // examples
+                            if (endpoint.example?.length) {
+                                let exTitle = document.createElement('h3');
+                                exTitle.textContent = 'Examples';
+                                exTitle.style.marginTop = '1rem';
+                                content.appendChild(exTitle);
+
+                                endpoint.example.forEach(ex => {
+                                    let code = document.createElement('div');
+                                    code.className = 'response-example';
+                                    code.textContent = ex;
+                                    content.appendChild(code);
+                                });
+                            }
+
+                            apiBlock.appendChild(header);
+                            apiBlock.appendChild(content);
+                            section.appendChild(apiBlock);
+
+                            header.onclick = () => content.classList.toggle('active');
+                        }
+
+                        main.appendChild(section);
+                    }
+                }
+
+                function makeParamsTable(params) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                    ${params.some(p => p.default) ? '<th>Default</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${params.map(p => `
+                                    <tr>
+                                        <td>${p.name}</td>
+                                        <td><code>${p.type}</code></td>
+                                        <td>${p.optional ? '—' : '✓'}</td>
+                                        <td>${p.description}</td>
+                                        ${params.some(p => p.default) ?
+                            `<td>${p.default || '—'}</td>` : ''}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                function makeHeadersTable(headers) {
+                    if (!headers || !headers.length) return null;
+
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                <h3 style="margin-top:1rem">Headers</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${headers.map(header => `
+                            <tr>
+                                <td><code>${header.name}</code></td>
+                                <td>${header.description}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+                    return div;
+                }
+
+                function makeReturnsTable(returns) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Returns</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${returns.map(r => `
+                                    <tr>
+                                        <td>${r.name}</td>
+                                        <td><code>${r.type}</code></td>
+                                        <td>${r.description}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                function makeErrorsTable(errors) {
+                    let div = document.createElement('div');
+                    div.innerHTML = `
+                        <h3 style="margin-top:1rem">Errors</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Error</th>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${errors.map(e => `
+                                    <tr>
+                                        <td>${e.name}</td>
+                                        <td><span class="badge error">${e.type}</span></td>
+                                        <td>${e.description}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    return div;
+                }
+
+                makeSidebar();
+                renderContent();
+        </script>
+    </body>
+</html>

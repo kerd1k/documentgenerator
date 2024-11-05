@@ -9,7 +9,8 @@ Generate Json from JavaDoc comments
 -   --destination - file path where to save JSON file with generated content (example: doc.json)
 -   --inject - file path where to inject (replace) generated content
 -   --injectVariable - variable to replace with generated content (default: {{docjson}})
--   --template - template file path where to put default template
+-   --template - template file path where to PUT template
+-   --templatePath - template file path where to GET template (default: ./template.html)
 
 ## Use examples:
 

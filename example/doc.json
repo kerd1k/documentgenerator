@@ -1,0 +1,244 @@
+{
+  "/auth/example": {
+    "test": {
+      "handler": "test",
+      "fullPath": "/auth/example/test",
+      "description": "Test route for /api/v1/example/test",
+      "method": "GET",
+      "parameters": [
+        {
+          "name": "req",
+          "type": "",
+          "description": "Request object, contains all nessessary data",
+          "optional": false
+        }
+      ],
+      "private": false,
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\n        http://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\n        http://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "testDocs": {
+      "handler": "testDocs",
+      "fullPath": "/auth/example/testDocs",
+      "description": "TestDocs route",
+      "method": "GET",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "testDocumentation": {
+      "handler": "testDocs",
+      "ignoreInterceptor": "true",
+      "fullPath": "/auth/example/testDocumentation",
+      "description": "TestDocs route",
+      "method": "GET",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    }
+  }
+}
