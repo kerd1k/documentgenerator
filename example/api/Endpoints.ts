@@ -4,15 +4,100 @@ import { Errors } from "../Errors";
 import { GD } from "../GD";
 import { Validator } from "badmfck-api-server";
 
+// this.([
+//     // { endpoint: "test", handler: this.test },
+//     { endpoint: "testDocs", handler: this.testDocs },
+//     { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
+//     { endpoint: "testPrivate", handler: this.testDocsPrivate },
+//     { endpoint: "testPrivate3", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
+//     {
+//         ignoreInterceptor: false,
+//         endpoint: "testPrivate2",
+//         handler: this.testDocsPrivate,
+//     },
+//     {
+//         endpoint: "ui/test",
+//         ignoreInterceptor: false,
+//         handler: {
+//             POST: this.getDocTestPost,
+//             GET: this.getDocTestGet,
+//             PUT: {
+//                 controller: this.getDocTestPut,
+//                 ignoreInterceptor: true,
+//             },
+//             ASD: this.getDocTestAsd,
+//         },
+//     },
+// ]);
 export class Example extends BaseEndpoint {
     constructor() {
         super("example"); // registrate route endpoint, as in /api/v1/example
         this.registerEndpoints([
             // { endpoint: "test", handler: this.test },
             { endpoint: "testDocs", handler: this.testDocs },
+            // { endpoint: "test", handler: this.test },
             { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
             { endpoint: "testPrivate", handler: this.testDocsPrivate },
+            { endpoint: "testPrivate3", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
+            {
+                ignoreInterceptor: false,
+                endpoint: "testPrivate2",
+                handler: this.testDocsPrivate,
+            },
+            {
+                endpoint: "ui/test",
+                ignoreInterceptor: false,
+                handler: {
+                    POST: this.getDocTestPost,
+                    GET: this.getDocTestGet,
+                    PUT: {
+                        controller: this.getDocTestPut,
+                        ignoreInterceptor: true,
+                    },
+                    ASD: this.getDocTestAsd,
+                },
+            },
         ]);
+    }
+
+    /**
+     * @description - TEST GET
+     * @returns {JSON2} json - JSON from file
+     * @throws {Error 1002} DOC_NO_DOCUMENT - no json file for documentation
+     * @example - GET http://localhost/auth/doc/ui/test/
+     */
+    async getDocTestGet(): Promise<TransferPacketVO<any>> {
+        return { data: "TEST GET" };
+    }
+
+    /**
+     * @description - TEST POST
+     * @returns {JSON3} json - JSON from file
+     * @throws {Error 1003} DOC_NO_DOCUMENT - no json file for documentation
+     * @example - POST http://localhost/auth/doc/ui/test/
+     */
+    async getDocTestPost(): Promise<TransferPacketVO<any>> {
+        return { data: "TEST POST" };
+    }
+
+    /**
+     * @description - TEST PUT
+     * @returns {JSON4} json - JSON from file
+     * @throws {Error 1004} DOC_NO_DOCUMENT - no json file for documentation
+     * @example - PUT http://localhost/auth/doc/ui/test/
+     */
+    async getDocTestPut(): Promise<TransferPacketVO<any>> {
+        return { data: "TEST PUT" };
+    }
+
+    /**
+     * @description - TEST ASD - manual method
+     * @returns {JSON5} json - JSON from file
+     * @throws {Error 1005} DOC_NO_DOCUMENT - no json file for documentation
+     * @example - ASD http://localhost/auth/doc/ui/test/
+     */
+    async getDocTestAsd(): Promise<TransferPacketVO<any>> {
+        return { data: "TEST ASD" };
     }
 
     /**

@@ -98,14 +98,42 @@ export class DocumentGenerator {
 
             const nodeEndpoint = this.config.apiEndpoint + (baseEndpoint[1] ? "/" + baseEndpoint[1] : "");
 
-            // get all endpoints
-            // const regex = /{\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*}/g; //with commented endpoints - included
-            const regex = /(?<!\/\/\s*)({\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*})/g; //commented endpoints - excluded
+            const endpointsRegex = /this\.registerEndpoints\(\s*\[([\s\S]*?)\]\s*\)/;
+            const endpointsMatch = fileContent.match(endpointsRegex);
+            if (!endpointsMatch) {
+                // console.error("Can't find endpoints in registerEndpoints.");
+                // this.raiseError("Can't find endpoints in registerEndpoints.");
+                console.error(`Can't find endpoints in registerEndpoints: ${baseEndpoint}`);
+                continue;
+            }
 
-            const endpoints = fileContent.matchAll(regex);
+            let endpointsContent = endpointsMatch[1];
 
-            for (const match of endpoints) {
-                const endpointName: string = match[2];
+            endpointsContent = endpointsContent
+                .replace(/\/\/[^\n]*\n/g, "\n") // remove one-line comment //
+                .replace(/\/\*[\s\S]*?\*\//g, "") // remove multi-line comments /**/
+                .replace(/(,)\s*}/g, "}") // remove comma before bracket }
+                .replace(/,\s*$/, "") // remove comma at the end
+                .replace(/this\.(\w+)/g, '"$1"') // change "this.method" to "method"
+                .replace(/'/g, '"') // change ' to "
+                .replace(/(\w+):/g, '"$1":') // change all keys to JSON format ("key": value)
+                .trim();
+
+            const jsonEndpoints = `[${endpointsContent}]`;
+
+            let endpointsArray;
+            try {
+                endpointsArray = JSON.parse(jsonEndpoints);
+            } catch (e) {
+                // console.error("Ошибка при парсинге JSON:", e as string);
+                console.error(`Error parsing JSON: ${baseEndpoint} ${e as string}`);
+                continue;
+            }
+
+            //TODO:!!!!!
+            //TODO: parse handler as object
+            for (const endpoint of endpointsArray) {
+                const endpointName: string = endpoint.name;
                 const handler = match[3];
                 const ignoreInterceptor = match[4];
 
@@ -130,6 +158,40 @@ export class DocumentGenerator {
                     this.documentation[nodeEndpoint][endpointName] = endpoint;
                 }
             }
+
+            //ENDPOINTS WITH RegEx
+            // get all endpoints
+            // const regex = /{\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*}/g; //with commented endpoints - included
+            // const regex = /(?<!\/\/\s*)({\s*endpoint:\s*"(.*?)",\s*handler:\s*this\.(.*?)(?:,\s*ignoreInterceptor:\s*(true|false))?\s*})/g; //commented endpoints - excluded
+
+            // const endpoints = fileContent.matchAll(regex);
+
+            // for (const match of endpoints) {
+            //     const endpointName: string = match[2];
+            //     const handler = match[3];
+            //     const ignoreInterceptor = match[4];
+
+            //     if (!this.documentation.hasOwnProperty(nodeEndpoint)) {
+            //         this.documentation[nodeEndpoint] = {};
+            //     }
+
+            //     const endpoint: DocumentGeneratorDocumentationEndpoint = {
+            //         handler,
+            //         ignoreInterceptor,
+            //         fullPath: nodeEndpoint + "/" + endpointName,
+            //         description: "",
+            //         method: "GET",
+            //         parameters: [],
+            //         private: false,
+            //         // headers: [],
+            //     };
+
+            //     this.parseEndPointComments(this.getCommentsByEndpoint(fileContent, handler), endpoint);
+
+            //     if (endpoint.private !== true) {
+            //         this.documentation[nodeEndpoint][endpointName] = endpoint;
+            //     }
+            // }
         }
 
         // this.saveDocumentation();
