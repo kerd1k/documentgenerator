@@ -43,6 +43,12 @@ declare type DocumentGeneratorDocumentationEndpointParameter = {
     default?: string;
 } & DocumentGeneratorDocumentationEndpointDefaultParameter;
 
+declare type DucumentGeneratorDocumentationEndpointJson = {
+    endpoint: string;
+    handler: string | { [method: string]: string | { controller: string; ignoreInterceptor?: string } };
+    ignoreInterceptor?: string;
+};
+
 export class DocumentGenerator {
     private documentation: DocumentGeneratorDocumentation = {};
     private config: DocumentGeneratorConfig;
@@ -121,9 +127,9 @@ export class DocumentGenerator {
 
             const jsonEndpoints = `[${endpointsContent}]`;
 
-            let endpointsArray;
+            let endpointsArrayFromJson: DucumentGeneratorDocumentationEndpointJson[];
             try {
-                endpointsArray = JSON.parse(jsonEndpoints);
+                endpointsArrayFromJson = JSON.parse(jsonEndpoints);
             } catch (e) {
                 // console.error("Ошибка при парсинге JSON:", e as string);
                 console.error(`Error parsing JSON: ${baseEndpoint} ${e as string}`);
@@ -132,10 +138,10 @@ export class DocumentGenerator {
 
             //TODO:!!!!!
             //TODO: parse handler as object
-            for (const endpoint of endpointsArray) {
-                const endpointName: string = endpoint.name;
-                const handler = match[3];
-                const ignoreInterceptor = match[4];
+            for (const endpointFromJson of endpointsArrayFromJson) {
+                const endpointName: string = endpointFromJson.endpoint;
+                const handler = endpointFromJson.handler;
+                const ignoreInterceptor = endpointFromJson.ignoreInterceptor;
 
                 if (!this.documentation.hasOwnProperty(nodeEndpoint)) {
                     this.documentation[nodeEndpoint] = {};
