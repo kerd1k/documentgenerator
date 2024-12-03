@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { parse, Spec } from "comment-parser";
 import { isDirectory } from "./utils";
+import { Validator } from "./Validator";
 
 declare type DocumentGeneratorConfig = {
     sourcePath: string | null;
@@ -131,14 +132,18 @@ export class DocumentGenerator {
             try {
                 endpointsArrayFromJson = JSON.parse(jsonEndpoints);
             } catch (e) {
-                // console.error("Ошибка при парсинге JSON:", e as string);
                 console.error(`Error parsing JSON: ${baseEndpoint} ${e as string}`);
+
                 continue;
             }
 
-            //TODO:!!!!!
-            //TODO: parse handler as object
             for (const endpointFromJson of endpointsArrayFromJson) {
+                if (!Validator.validateObject(["endpoint", "handler"], endpointFromJson)) {
+                    console.error(`Error validating object:`, endpointFromJson);
+
+                    continue;
+                }
+
                 const endpointName: string = endpointFromJson.endpoint;
                 const handler = endpointFromJson.handler;
                 const ignoreInterceptor = endpointFromJson.ignoreInterceptor;
@@ -147,21 +152,49 @@ export class DocumentGenerator {
                     this.documentation[nodeEndpoint] = {};
                 }
 
-                const endpoint: DocumentGeneratorDocumentationEndpoint = {
-                    handler,
-                    ignoreInterceptor,
-                    fullPath: nodeEndpoint + "/" + endpointName,
-                    description: "",
-                    method: "GET",
-                    parameters: [],
-                    private: false,
-                    // headers: [],
-                };
+                if (typeof handler === "string") {
+                    let method = "ALL";
+                    let endpoint = this.generateEndpoint(handler, ignoreInterceptor, nodeEndpoint + "/" + endpointName, method, fileContent);
 
-                this.parseEndPointComments(this.getCommentsByEndpoint(fileContent, handler), endpoint);
+                    if (endpoint && endpoint.private !== true) {
+                        this.documentation[nodeEndpoint][method + " " + endpointName] = endpoint;
+                    }
+                } else {
+                    for (let method in handler) {
+                        let endpoint: DocumentGeneratorDocumentationEndpoint | null = null;
 
-                if (endpoint.private !== true) {
-                    this.documentation[nodeEndpoint][endpointName] = endpoint;
+                        if (typeof handler[method] === "string") {
+                            endpoint = this.generateEndpoint(
+                                handler[method],
+                                ignoreInterceptor,
+                                nodeEndpoint + "/" + endpointName,
+                                method,
+                                fileContent
+                            );
+                        } else {
+                            if (Validator.validateObject(["controller"], handler[method])) {
+                                const ignoreInterceptorHandler = Validator.validateObject(["ignoreInterceptor"], handler[method])
+                                    ? handler[method].ignoreInterceptor
+                                    : ignoreInterceptor;
+
+                                endpoint = this.generateEndpoint(
+                                    handler[method].controller,
+                                    ignoreInterceptorHandler,
+                                    nodeEndpoint + "/" + endpointName,
+                                    method,
+                                    fileContent
+                                );
+                            } else {
+                                console.error(`Error validating handler, no controller:`, handler[method]);
+
+                                continue;
+                            }
+                        }
+
+                        if (endpoint && endpoint.private !== true) {
+                            this.documentation[nodeEndpoint][method + " " + endpointName] = endpoint;
+                        }
+                    }
                 }
             }
 
@@ -205,6 +238,38 @@ export class DocumentGenerator {
         console.log("Documentation generated successfully");
     };
 
+    /**
+     *
+     * start generating endpoint - with default values
+     *
+     * @param handler
+     * @param ignoreInterceptor
+     * @param fullPath
+     * @param fileContent
+     */
+    private generateEndpoint(
+        handler: string,
+        ignoreInterceptor: string | undefined,
+        fullPath: string,
+        method: string,
+        fileContent: string
+    ): DocumentGeneratorDocumentationEndpoint {
+        const endpoint: DocumentGeneratorDocumentationEndpoint = {
+            handler,
+            ignoreInterceptor,
+            fullPath,
+            method,
+            description: "",
+            parameters: [],
+            private: false,
+            // headers: [],
+        };
+
+        this.parseEndPointComments(this.getCommentsByEndpoint(fileContent, handler), endpoint);
+
+        return endpoint;
+    }
+
     private getCommentsByEndpoint(fileContent: string, handler: string): string {
         let comments: string = "";
 
@@ -247,6 +312,14 @@ export class DocumentGenerator {
         return comments;
     }
 
+    /**
+     *
+     * From comment-parser library to json
+     *
+     * @param comments
+     * @param endpoint
+     * @returns
+     */
     private parseEndPointComments(comments: string, endpoint: DocumentGeneratorDocumentationEndpoint): DocumentGeneratorDocumentationEndpoint {
         if (comments) {
             const parsed = parse(comments, { spacing: "preserve" });
@@ -266,9 +339,8 @@ export class DocumentGenerator {
     }
 
     /**
-     * From comment-parser library to json
      *
-     * @param tag
+     * @param {Spec} tag - from comment-parser library generated tag ("Spec" type from comment-library)
      * @param endpoint
      * @returns
      */

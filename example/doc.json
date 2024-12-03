@@ -1,1 +1,588 @@
-{}
+{
+  "/auth/example": {
+    "ALL test": {
+      "handler": "testDocs",
+      "fullPath": "/auth/example/test",
+      "method": "ALL",
+      "description": "TestDocs route",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "headers": [
+        {
+          "name": "authorization",
+          "description": "user auth token, to get user from API"
+        }
+      ],
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "ALL testWithIgnoreInterceptor": {
+      "handler": "testDocs",
+      "ignoreInterceptor": true,
+      "fullPath": "/auth/example/testWithIgnoreInterceptor",
+      "method": "ALL",
+      "description": "TestDocs route",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "headers": [
+        {
+          "name": "authorization",
+          "description": "user auth token, to get user from API"
+        }
+      ],
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "ALL ui/testWithMultiSlash": {
+      "handler": "testDocs",
+      "fullPath": "/auth/example/ui/testWithMultiSlash",
+      "method": "ALL",
+      "description": "TestDocs route",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "headers": [
+        {
+          "name": "authorization",
+          "description": "user auth token, to get user from API"
+        }
+      ],
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "ALL testWithMultiline": {
+      "handler": "testDocs",
+      "ignoreInterceptor": false,
+      "fullPath": "/auth/example/testWithMultiline",
+      "method": "ALL",
+      "description": "TestDocs route",
+      "parameters": [
+        {
+          "name": "employee",
+          "type": "Object",
+          "description": "The employee who is responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employee.name",
+          "type": "string",
+          "description": "The name of the employee.",
+          "optional": false
+        },
+        {
+          "name": "employee.department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "employees",
+          "type": "Object[]",
+          "description": "The employees who are responsible for the project.",
+          "optional": false
+        },
+        {
+          "name": "employees[].name",
+          "type": "string",
+          "description": "The name of an employee.",
+          "optional": false
+        },
+        {
+          "name": "employees[].department",
+          "type": "string",
+          "description": "The employee's department.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": false
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "string",
+          "description": "Somebody's name.",
+          "optional": true,
+          "default": "John Doe"
+        },
+        {
+          "name": "somebody",
+          "type": "(string|string[])",
+          "description": "Somebody's name, or an array of names.",
+          "optional": true,
+          "default": "John Doe"
+        }
+      ],
+      "private": false,
+      "headers": [
+        {
+          "name": "authorization",
+          "description": "user auth token, to get user from API"
+        }
+      ],
+      "throws": [
+        {
+          "name": "",
+          "type": "InvalidArgumentException",
+          "description": ""
+        },
+        {
+          "name": "",
+          "type": "",
+          "description": "Will throw an error if the argument is null."
+        },
+        {
+          "name": "",
+          "type": "DivideByZero",
+          "description": "Argument x must be non-zero."
+        }
+      ],
+      "returns": [
+        {
+          "name": "",
+          "type": "TransferPacketVO<any>",
+          "description": "response object"
+        }
+      ],
+      "example": [
+        "// returns 2\nglobalNS.method1(5, 10);",
+        "// returns 3\nglobalNS.method(5, 15);",
+        "http://localhost:8015/api/v1/example/test?test=test - will return {data:true}\nhttp://localhost:8015/api/v1/example/test?test=test2 - will return {data:false}\nhttp://localhost:8015/api/v1/example/test - will return error"
+      ]
+    },
+    "POST ui/testWithDifferentMethods": {
+      "handler": "getDocTestPost",
+      "ignoreInterceptor": false,
+      "fullPath": "/auth/example/ui/testWithDifferentMethods",
+      "method": "POST",
+      "description": "TEST POST",
+      "parameters": [],
+      "private": false,
+      "returns": [
+        {
+          "name": "json",
+          "type": "JSON3",
+          "description": "JSON from file"
+        }
+      ],
+      "throws": [
+        {
+          "name": "DOC_NO_DOCUMENT",
+          "type": "Error 1003",
+          "description": "no json file for documentation"
+        }
+      ],
+      "example": [
+        "POST http://localhost/auth/doc/ui/test/"
+      ]
+    },
+    "GET ui/testWithDifferentMethods": {
+      "handler": "getDocTestGet",
+      "ignoreInterceptor": false,
+      "fullPath": "/auth/example/ui/testWithDifferentMethods",
+      "method": "GET",
+      "description": "TEST GET",
+      "parameters": [],
+      "private": false,
+      "returns": [
+        {
+          "name": "json",
+          "type": "JSON2",
+          "description": "JSON from file"
+        }
+      ],
+      "throws": [
+        {
+          "name": "DOC_NO_DOCUMENT",
+          "type": "Error 1002",
+          "description": "no json file for documentation"
+        }
+      ],
+      "example": [
+        "GET http://localhost/auth/doc/ui/test/"
+      ]
+    },
+    "DELETE ui/testWithDifferentMethods": {
+      "handler": "getDocTestDel",
+      "ignoreInterceptor": false,
+      "fullPath": "/auth/example/ui/testWithDifferentMethods",
+      "method": "DELETE",
+      "description": "TEST DELETE",
+      "parameters": [],
+      "private": false,
+      "returns": [
+        {
+          "name": "json",
+          "type": "JSON6",
+          "description": "JSON from file"
+        }
+      ],
+      "throws": [
+        {
+          "name": "DOC_NO_DOCUMENT",
+          "type": "Error 1006",
+          "description": "no json file for documentation"
+        }
+      ],
+      "example": [
+        "DELETE http://localhost/auth/doc/ui/test/"
+      ]
+    },
+    "PUT ui/testWithDifferentMethods": {
+      "handler": "getDocTestPut",
+      "ignoreInterceptor": true,
+      "fullPath": "/auth/example/ui/testWithDifferentMethods",
+      "method": "PUT",
+      "description": "TEST PUT",
+      "parameters": [],
+      "private": false,
+      "returns": [
+        {
+          "name": "json",
+          "type": "JSON4",
+          "description": "JSON from file"
+        }
+      ],
+      "throws": [
+        {
+          "name": "DOC_NO_DOCUMENT",
+          "type": "Error 1004",
+          "description": "no json file for documentation"
+        }
+      ],
+      "example": [
+        "PUT http://localhost/auth/doc/ui/test/"
+      ]
+    },
+    "ASD ui/testWithDifferentMethods": {
+      "handler": "getDocTestAsd",
+      "ignoreInterceptor": false,
+      "fullPath": "/auth/example/ui/testWithDifferentMethods",
+      "method": "ASD",
+      "description": "TEST ASD - manual method",
+      "parameters": [],
+      "private": false,
+      "returns": [
+        {
+          "name": "json",
+          "type": "JSON5",
+          "description": "JSON from file"
+        }
+      ],
+      "throws": [
+        {
+          "name": "DOC_NO_DOCUMENT",
+          "type": "Error 1005",
+          "description": "no json file for documentation"
+        }
+      ],
+      "example": [
+        "ASD http://localhost/auth/doc/ui/test/"
+      ]
+    }
+  }
+}

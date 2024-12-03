@@ -4,52 +4,29 @@ import { Errors } from "../Errors";
 import { GD } from "../GD";
 import { Validator } from "badmfck-api-server";
 
-// this.([
-//     // { endpoint: "test", handler: this.test },
-//     { endpoint: "testDocs", handler: this.testDocs },
-//     { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
-//     { endpoint: "testPrivate", handler: this.testDocsPrivate },
-//     { endpoint: "testPrivate3", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
-//     {
-//         ignoreInterceptor: false,
-//         endpoint: "testPrivate2",
-//         handler: this.testDocsPrivate,
-//     },
-//     {
-//         endpoint: "ui/test",
-//         ignoreInterceptor: false,
-//         handler: {
-//             POST: this.getDocTestPost,
-//             GET: this.getDocTestGet,
-//             PUT: {
-//                 controller: this.getDocTestPut,
-//                 ignoreInterceptor: true,
-//             },
-//             ASD: this.getDocTestAsd,
-//         },
-//     },
-// ]);
 export class Example extends BaseEndpoint {
     constructor() {
         super("example"); // registrate route endpoint, as in /api/v1/example
         this.registerEndpoints([
             // { endpoint: "test", handler: this.test },
-            { endpoint: "testDocs", handler: this.testDocs },
+            { endpoint: "test", handler: this.testDocs },
             // { endpoint: "test", handler: this.test },
-            { endpoint: "testDocumentation", handler: this.testDocs, ignoreInterceptor: true },
+            { endpoint: "testWithIgnoreInterceptor", handler: this.testDocs, ignoreInterceptor: true },
             { endpoint: "testPrivate", handler: this.testDocsPrivate },
-            { endpoint: "testPrivate3", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
+            { endpoint: "testWithCommentInside", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
+            { endpoint: "ui/testWithMultiSlash", handler: this.testDocs },
             {
                 ignoreInterceptor: false,
-                endpoint: "testPrivate2",
-                handler: this.testDocsPrivate,
+                endpoint: "testWithMultiline",
+                handler: this.testDocs,
             },
             {
-                endpoint: "ui/test",
+                endpoint: "ui/testWithDifferentMethods",
                 ignoreInterceptor: false,
                 handler: {
                     POST: this.getDocTestPost,
                     GET: this.getDocTestGet,
+                    DELETE: this.getDocTestDel,
                     PUT: {
                         controller: this.getDocTestPut,
                         ignoreInterceptor: true,
@@ -68,6 +45,16 @@ export class Example extends BaseEndpoint {
      */
     async getDocTestGet(): Promise<TransferPacketVO<any>> {
         return { data: "TEST GET" };
+    }
+
+    /**
+     * @description - TEST DELETE
+     * @returns {JSON6} json - JSON from file
+     * @throws {Error 1006} DOC_NO_DOCUMENT - no json file for documentation
+     * @example - DELETE http://localhost/auth/doc/ui/test/
+     */
+    async getDocTestDel(): Promise<TransferPacketVO<any>> {
+        return { data: "TEST DEL" };
     }
 
     /**
@@ -141,6 +128,8 @@ export class Example extends BaseEndpoint {
     * @static
     * @deprecated
     * @author - Aleksejs Cetverikovs <kerd1k@gmail.com>
+    * 
+    * @header {string} authorization - user auth token, to get user from API
     *
     * @param {Object} employee - The employee who is responsible for the project.
     * @param {string} employee.name - The name of the employee.
