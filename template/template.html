@@ -177,6 +177,7 @@
                 overflow-x: auto;
                 margin: 1rem 0;
                 font-family: monospace;
+                white-space: pre;
             }
 
             .badge {
@@ -247,6 +248,7 @@
             function renderContent() {
                 let main = document.getElementById("main-content");
                 let groups = groupEndpoints(jsonData);
+                showdown.setOption("simpleLineBreaks", true);
                 var converter = new showdown.Converter();
 
                 for (let [groupPath, groupData] of Object.entries(groups)) {
@@ -290,7 +292,8 @@
                         if (endpoint.description) {
                             let desc = document.createElement("div");
                             desc.style.marginBottom = "1rem";
-                            desc.textContent = endpoint.description;
+                            // desc.textContent = endpoint.description;
+                            desc.innerHTML = converter.makeHtml(endpoint.description);
                             content.appendChild(desc);
                         }
 

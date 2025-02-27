@@ -238,6 +238,12 @@ export class DocumentGenerator {
             //         this.documentation[nodeEndpoint][endpointName] = endpoint;
             //     }
             // }
+
+            if (this.documentation[nodeEndpoint]) {
+                if (Object.keys(this.documentation[nodeEndpoint]["endpoints"]).length === 0) {
+                    delete this.documentation[nodeEndpoint];
+                }
+            }
         }
 
         // this.saveDocumentation();

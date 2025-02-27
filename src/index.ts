@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 
+// import path from "path";
+// import fs from "fs";
 import { DocumentGenerator } from "./DocumentGenerator";
 import { copyFile, getArgument, replaceInFile } from "./utils";
+
+//TODO: get interfaces and types + set to UI
+//TODO: Errors parse and add to UI
+//TODO: add NodeJS example
 
 try {
     const config = {
@@ -38,4 +44,50 @@ try {
     console.error(`Error: ${error}`);
 }
 
-// console.log(`Welcome to The Matrix, Neo!`);
+// const projectRoot = path.resolve(__dirname, "../example/api");
+
+// function getAllTSFiles(dir: string): string[] {
+//     let results: string[] = [];
+//     const list = fs.readdirSync(dir);
+
+//     for (const file of list) {
+//         const filePath = path.join(dir, file);
+//         const stat = fs.statSync(filePath);
+
+//         if (stat && stat.isDirectory()) {
+//             results = results.concat(getAllTSFiles(filePath));
+//         } else if (file.endsWith(".ts") || file.endsWith(".tsx")) {
+//             results.push(filePath);
+//         }
+//     }
+//     return results;
+// }
+
+// function extractTypesAndInterfaces(filePath: string): Record<string, string> {
+//     const content = fs.readFileSync(filePath, "utf8");
+//     const matches = content.match(/(?:interface|type)\s+[A-Za-z0-9_]+\s*(?:=\s*[^;]+;|\{[^}]*\})/gs) || [];
+//     const result: Record<string, string> = {};
+
+//     matches.forEach((match) => {
+//         const nameMatch = match.match(/(?:interface|type)\s+([A-Za-z0-9_]+)/);
+//         if (nameMatch) {
+//             result[nameMatch[1]] = match;
+//         }
+//     });
+
+//     return result;
+// }
+
+// function collectAllTypesAndInterfaces(): Record<string, string> {
+//     const tsFiles = getAllTSFiles(projectRoot);
+//     let collected: Record<string, string> = {};
+
+//     for (const file of tsFiles) {
+//         Object.assign(collected, extractTypesAndInterfaces(file));
+//     }
+
+//     return collected;
+// }
+
+// const allTypesAndInterfaces = collectAllTypesAndInterfaces();
+// console.log(allTypesAndInterfaces);

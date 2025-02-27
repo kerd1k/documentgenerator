@@ -4,6 +4,15 @@ import { Errors } from "../Errors";
 import { GD } from "../GD";
 import { Validator } from "badmfck-api-server";
 
+export interface ExampleRequestVO {
+    test: string;
+    name: string;
+    age: number;
+    isAdmin: boolean;
+}
+
+export type project = "vibo.tips" | "amazing.money" | "freeply.cards";
+
 export class Example extends BaseEndpoint {
     constructor() {
         super("example"); // registrate route endpoint, as in /api/v1/example
@@ -118,7 +127,7 @@ export class Example extends BaseEndpoint {
     }
 
     /**
-    * Represents a book.
+    * Represents a book - this description not shown, becuase of @description
     *
     * @class - (synonyms: @constructor)
     * @async

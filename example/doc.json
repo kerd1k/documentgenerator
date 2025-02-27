@@ -6,7 +6,7 @@
         "handler": "add",
         "fullPath": "/auth/acquirer/add",
         "method": "POST",
-        "description": "Add",
+        "description": "Add new acquirer\nMulti-line **description**",
         "parameters": [
           {
             "name": "data",
@@ -36,7 +36,7 @@
           }
         ],
         "example": [
-          "POST http://localhost/api/acquirer/add"
+          "curl --location 'http://localhost:8095/api/template/transfer/add' \\\n        --header 'Authorization: ZEZyZLkoH-6q-Gr6hp2tk8Ktdci787WEfjfiuT38IWE' \\\n        --header 'Content-Type: application/json' \\\n        --data '{\n            'amount': 235,\n            'currency': 1,\n            'paymentMethod': 'internal',\n            'paymentAccountUid': '123456789',\n            'includeFeeIntoAmount2': 0,\n            'paymentMethodDetails': {\n                    'accountUID': 'amazing cardUID',\n                    'type':'amazingCard'\n            },\n            'target': {\n                    'details': 'accountUID',\n                    'type': 'amazingCash'\n            }\n        }'"
         ]
       },
       "POST update/:id": {
