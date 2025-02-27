@@ -197,6 +197,8 @@
                 color: #dc2626;
             }
         </style>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
     </head>
 
     <body>
@@ -245,8 +247,9 @@
             function renderContent() {
                 let main = document.getElementById("main-content");
                 let groups = groupEndpoints(jsonData);
+                var converter = new showdown.Converter();
 
-                for (let [groupPath, endpoints] of Object.entries(groups)) {
+                for (let [groupPath, groupData] of Object.entries(groups)) {
                     let section = document.createElement("section");
                     section.id = groupPath;
 
@@ -255,6 +258,18 @@
                     title.textContent = name.toUpperCase();
                     title.style.marginBottom = "1rem";
                     section.appendChild(title);
+
+                    // group description
+                    let description = groupData.description;
+                    if (description) {
+                        let desc = document.createElement("div");
+                        desc.style.marginBottom = "1rem";
+                        desc.innerHTML = converter.makeHtml(description);
+                        section.appendChild(desc);
+                    }
+
+                    // group endpoints
+                    let endpoints = groupData.endpoints;
 
                     for (let [subPath, endpoint] of Object.entries(endpoints)) {
                         if (typeof endpoint !== "object" || !endpoint.method) continue;

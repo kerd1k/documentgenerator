@@ -7,13 +7,17 @@ import { Validator } from "./Validator";
 declare type DocumentGeneratorConfig = {
     sourcePath: string | null;
     apiEndpoint: string | null;
+    docPath: string | null;
     // savePath?: string | null;
     // savePathFileName?: string | null;
 };
 
 declare type DocumentGeneratorDocumentation = {
     [baseEndpointName: string]: {
-        [endPointName: string]: DocumentGeneratorDocumentationEndpoint;
+        description: string;
+        endpoints: {
+            [endPointName: string]: DocumentGeneratorDocumentationEndpoint;
+        };
     };
 };
 
@@ -149,7 +153,10 @@ export class DocumentGenerator {
                 const ignoreInterceptor = endpointFromJson.ignoreInterceptor;
 
                 if (!this.documentation.hasOwnProperty(nodeEndpoint)) {
-                    this.documentation[nodeEndpoint] = {};
+                    this.documentation[nodeEndpoint] = {
+                        description: baseEndpoint[1] && this.config.docPath ? this.generateDescription(baseEndpoint[1]) : "",
+                        endpoints: {},
+                    };
                 }
 
                 if (typeof handler === "string") {
@@ -157,7 +164,7 @@ export class DocumentGenerator {
                     let endpoint = this.generateEndpoint(handler, ignoreInterceptor, nodeEndpoint + "/" + endpointName, method, fileContent);
 
                     if (endpoint && endpoint.private !== true) {
-                        this.documentation[nodeEndpoint][method + " " + endpointName] = endpoint;
+                        this.documentation[nodeEndpoint]["endpoints"][method + " " + endpointName] = endpoint;
                     }
                 } else {
                     for (let method in handler) {
@@ -192,7 +199,7 @@ export class DocumentGenerator {
                         }
 
                         if (endpoint && endpoint.private !== true) {
-                            this.documentation[nodeEndpoint][method + " " + endpointName] = endpoint;
+                            this.documentation[nodeEndpoint]["endpoints"][method + " " + endpointName] = endpoint;
                         }
                     }
                 }
@@ -473,5 +480,20 @@ export class DocumentGenerator {
     private raiseError(error: string): never {
         // console.log(`Error: ${error}`);
         throw new Error(error);
+    }
+
+    private generateDescription(baseEndpoint: string): string {
+        if (!this.config.docPath) return "";
+
+        const dir = path.resolve(this.config.docPath);
+        baseEndpoint = baseEndpoint.replace(/[\/\\]/g, "");
+
+        if (!fs.existsSync(dir)) return "";
+
+        const file = path.resolve(dir, `${baseEndpoint}.md`);
+
+        if (!fs.existsSync(file)) return "";
+
+        return fs.readFileSync(file, "utf-8");
     }
 }

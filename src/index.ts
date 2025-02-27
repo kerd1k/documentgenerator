@@ -12,11 +12,13 @@ try {
         injectVariable: getArgument("--injectVariable", "{{docjson}}"),
         template: getArgument("--template", null),
         templatePath: getArgument("--templatePath", `${__dirname}/template.html`),
+        docPath: getArgument("--docPath", null),
     };
 
     const documentGeneratorConfig = {
         sourcePath: config.source,
         apiEndpoint: config.endpoint,
+        docPath: config.docPath,
     };
 
     const documentGenerator = new DocumentGenerator(documentGeneratorConfig);
