@@ -11,6 +11,7 @@ Generate Json from JavaDoc comments
 -   --injectVariable - variable to replace with generated content (default: {{docjson}})
 -   --template - template file path where to PUT template
 -   --templatePath - template file path where to GET template (default: ./template.html)
+-   --docPath - path for .md files - group endpoints description (example: ./doc, default: null)
 
 ## Use examples:
 
@@ -30,9 +31,9 @@ Copy template and inject:
 
 `documentgenerator  --source=./src/ --endpoint=auth --template=./documentation.html --injectFileName=documentation.html --injectVariable="{{docjson}}"`
 
-Copy template, inject in it and save to file:
+Copy template, inject in it, save to file and parse .md files for documentation:
 
-`documentgenerator  --source=./src/ --endpoint=auth --destination=./bin/doc.json --template=./documentation.html --injectFileName=documentation.html --injectVariable="{{docjson}}"`
+`documentgenerator  --source=./src/ --endpoint=auth --destination=./bin/doc.json --template=./documentation.html --injectFileName=documentation.html --injectVariable="{{docjson}}" --docPath=./doc`
 
 ## Comments example
 
