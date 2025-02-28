@@ -34,13 +34,17 @@ declare type DocumentGeneratorDocumentationEndpoint = {
     // returns?: Omit<DocumentGeneratorDocumentationEndpointParameter, "optional" | "default">[];
     returns?: DocumentGeneratorDocumentationEndpointDefaultParameter[];
     example?: string[];
-    throws?: DocumentGeneratorDocumentationEndpointDefaultParameter[];
+    throws?: DocumentGeneratorDocumentationEndpointDefaultErrorParameter[];
 };
 
 declare type DocumentGeneratorDocumentationEndpointDefaultParameter = {
     name: string;
     type: string;
     description: string;
+};
+
+declare type DocumentGeneratorDocumentationEndpointDefaultErrorParameter = DocumentGeneratorDocumentationEndpointDefaultParameter & {
+    status: number;
 };
 
 declare type DocumentGeneratorDocumentationEndpointParameter = {
@@ -54,13 +58,28 @@ declare type DucumentGeneratorDocumentationEndpointJson = {
     ignoreInterceptor?: string;
 };
 
+declare type DocumentGeneratorType = {
+    [typeName: string]: any;
+};
+
+declare type DocumentGeneratorError = {
+    [typeName: string]: {
+        code: number;
+        message: string;
+        httpStatus: number;
+    };
+};
+
 export class DocumentGenerator {
     private documentation: DocumentGeneratorDocumentation = {};
+    private types: DocumentGeneratorType = {};
+    private errors: DocumentGeneratorError = {};
     private config: DocumentGeneratorConfig;
 
     constructor(config: DocumentGeneratorConfig) {
         this.config = config;
 
+        this.generateTypesInterfacesErrors();
         this.generateDocumentation();
     }
 
@@ -86,6 +105,88 @@ export class DocumentGenerator {
         return fs.readFileSync(filePath, "utf-8");
     }
 
+    private extractInterfaces(content: string): Record<string, string> {
+        const matches = content.match(/interface\s+[A-Za-z0-9_]+(?:\s+extends\s+[A-Za-z0-9_,\s<>|"']+)?\s*\{[^}]*\}/gs) || [];
+        const result: Record<string, string> = {};
+
+        matches.forEach((match) => {
+            const nameMatch = match.match(/interface\s+([A-Za-z0-9_]+)/);
+
+            if (nameMatch) {
+                result[nameMatch[1]] = match
+                    .replace(/\/\/[^\n]*\n/g, "\n") // remove one-line comment //
+                    .replace(/\/\*[\s\S]*?\*\//g, "") // remove multi-line comments /**/
+                    .replace(/'/g, '"') // change ' to "
+                    .trim();
+            }
+        });
+
+        return result;
+    }
+
+    private extractTypes(content: string): Record<string, string> {
+        const matches = content.match(/type\s+[A-Za-z0-9_]+\s*=\s*[^;]+;/gs) || [];
+        const result: Record<string, string> = {};
+
+        matches.forEach((match) => {
+            const nameMatch = match.match(/type\s+([A-Za-z0-9_]+)/);
+
+            if (nameMatch) {
+                result[nameMatch[1]] = match
+                    .replace(/\/\/[^\n]*\n/g, "\n") // remove one-line comment //
+                    .replace(/\/\*[\s\S]*?\*\//g, "") // remove multi-line comments /**/
+                    .replace(/'/g, '"') // change ' to "
+                    .trim();
+            }
+        });
+
+        return result;
+    }
+
+    extractErrors(content: string): Record<string, any> {
+        const matches = content.match(/static\s+([A-Z0-9_]+):\s*IError\s*=\s*\{[^}]+\}/gs) || [];
+        const result: Record<string, any> = {};
+
+        matches.forEach((match) => {
+            const nameMatch = match.match(/static\s+([A-Z0-9_]+):\s*IError\s*=\s*(\{[^}]+\})/);
+            if (nameMatch) {
+                try {
+                    result[nameMatch[1]] = eval(`(${nameMatch[2]})`);
+                } catch {
+                    result[nameMatch[1]] = nameMatch[2]; // В случае ошибки парсинга оставляем как строку
+                }
+            }
+        });
+
+        return result;
+    }
+
+    private generateTypesInterfacesErrors = () => {
+        if (!this.config.sourcePath) {
+            this.raiseError("No sourcePath in config.");
+
+            // return;
+        }
+
+        if (!fs.existsSync(this.config.sourcePath)) {
+            this.raiseError("Source directory does not exist");
+
+            // return;
+        }
+
+        // let collected: Record<string, string> = {};
+
+        for (const file of this.getFiles(this.config.sourcePath)) {
+            const fileContent = this.getFileContent(file);
+
+            Object.assign(this.types, this.extractInterfaces(fileContent));
+            Object.assign(this.types, this.extractTypes(fileContent));
+            Object.assign(this.errors, this.extractErrors(fileContent));
+        }
+
+        // console.dir(this.types);
+    };
+
     private generateDocumentation = () => {
         if (!this.config.sourcePath) {
             this.raiseError("No sourcePath in config.");
@@ -103,7 +204,8 @@ export class DocumentGenerator {
             // get base endpoint
             const baseEndpoint = fileContent.match(/super\(['"](.*?)['"]\)/);
             if (!baseEndpoint) {
-                console.error(`No base endpoint found in ${file}`);
+                // console.error(`No base endpoint found in ${file}`);
+
                 continue;
             }
 
@@ -114,7 +216,9 @@ export class DocumentGenerator {
             if (!endpointsMatch) {
                 // console.error("Can't find endpoints in registerEndpoints.");
                 // this.raiseError("Can't find endpoints in registerEndpoints.");
-                console.error(`Can't find endpoints in registerEndpoints: ${baseEndpoint}`);
+
+                // console.error(`Can't find endpoints in registerEndpoints: ${baseEndpoint}`);
+
                 continue;
             }
 
@@ -154,7 +258,7 @@ export class DocumentGenerator {
 
                 if (!this.documentation.hasOwnProperty(nodeEndpoint)) {
                     this.documentation[nodeEndpoint] = {
-                        description: baseEndpoint[1] && this.config.docPath ? this.generateDescription(baseEndpoint[1]) : "",
+                        description: baseEndpoint[1] && this.config.docPath ? this.getDescription(baseEndpoint[1]) : "",
                         endpoints: {},
                     };
                 }
@@ -239,6 +343,7 @@ export class DocumentGenerator {
             //     }
             // }
 
+            //remove group if no endpoints inside
             if (this.documentation[nodeEndpoint]) {
                 if (Object.keys(this.documentation[nodeEndpoint]["endpoints"]).length === 0) {
                     delete this.documentation[nodeEndpoint];
@@ -351,6 +456,36 @@ export class DocumentGenerator {
         return endpoint;
     }
 
+    private getType(type: string) {
+        if (type) {
+            if (type in this.types) {
+                return this.types[type].replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+        }
+
+        return type;
+    }
+
+    private getError(tag: Spec): DocumentGeneratorDocumentationEndpointDefaultErrorParameter {
+        const error: DocumentGeneratorDocumentationEndpointDefaultErrorParameter = {
+            name: this.tagModifications(tag.name, "name"), //error name - Error in html page
+            type: tag.type, //type in {} - Code in html page
+            description: this.tagModifications(tag.description), //description - get message or description
+            status: 0,
+        };
+
+        //static METHOD_NOT_ALLOWED: IError = { code: 405, message: "Method not allowed", httpStatus: 405 };
+        if (tag.type in this.errors) {
+            if (this.errors[tag.type].httpStatus) error.status = this.errors[tag.type].httpStatus;
+
+            if (this.errors[tag.type].code) error.type = this.errors[tag.type].code.toString();
+
+            if (this.errors[tag.type].message) error.description = this.errors[tag.type].message;
+        }
+
+        return error;
+    }
+
     /**
      *
      * @param {Spec} tag - from comment-parser library generated tag ("Spec" type from comment-library)
@@ -366,7 +501,7 @@ export class DocumentGenerator {
 
                 endpoint.parameters.push({
                     name: this.tagModifications(tag.name, "name"),
-                    type: tag.type,
+                    type: this.getType(tag.type),
                     description: this.tagModifications(tag.description),
                     optional: tag.optional,
                     default: tag.default,
@@ -395,7 +530,7 @@ export class DocumentGenerator {
 
                 endpoint.returns.push({
                     name: this.tagModifications(tag.name, "name"),
-                    type: tag.type,
+                    type: this.getType(tag.type),
                     description: this.tagModifications(tag.description),
                     // optional: tag.optional,
                 });
@@ -417,11 +552,7 @@ export class DocumentGenerator {
                     endpoint.throws = [];
                 }
 
-                endpoint.throws.push({
-                    name: this.tagModifications(tag.name, "name"),
-                    type: tag.type,
-                    description: this.tagModifications(tag.description),
-                });
+                endpoint.throws.push(this.getError(tag));
                 break;
         }
 
@@ -488,7 +619,7 @@ export class DocumentGenerator {
         throw new Error(error);
     }
 
-    private generateDescription(baseEndpoint: string): string {
+    private getDescription(baseEndpoint: string): string {
         if (!this.config.docPath) return "";
 
         const dir = path.resolve(this.config.docPath);

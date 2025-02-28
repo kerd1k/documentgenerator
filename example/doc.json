@@ -9,30 +9,57 @@
         "description": "Add new acquirer\nMulti-line **description**",
         "parameters": [
           {
-            "name": "data",
-            "type": "object",
+            "name": "IAcquirerEntity",
+            "type": "interface IAcquirerEntity extends Omit&lt;IAcquirer, \"deletedAt\" | \"createdAt\" | \"updatedAt\" | \"data\"&gt; {\r\n    deleted_at: string | null;\r\n    ctime: string;\r\n    utime: string | null;\r\n    data: string;\r\n}",
             "description": "payment details depends on type",
             "optional": false
+          },
+          {
+            "name": "IAcquirer",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}",
+            "description": "payment details depends on type",
+            "optional": false
+          },
+          {
+            "name": "optionalString",
+            "type": "string",
+            "description": "payment details depends on type",
+            "optional": true
+          },
+          {
+            "name": "testStringName",
+            "type": "string",
+            "description": "payment details depends on type",
+            "optional": true,
+            "default": "\"test\""
           }
         ],
         "private": false,
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "IAcquirer",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}",
             "description": "acquirer object"
           }
         ],
         "throws": [
           {
             "name": "WRONG_PARAMS",
-            "type": "Error 400",
-            "description": "wrong params"
+            "type": "400",
+            "description": "Wrong parameters",
+            "status": 400
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
+          },
+          {
+            "name": "ACQUIRER_ERROR2",
+            "type": "3000",
+            "description": "acquirer222 error222",
+            "status": 0
           }
         ],
         "example": [
@@ -69,13 +96,15 @@
         "throws": [
           {
             "name": "WRONG_PARAMS",
-            "type": "Error 400",
-            "description": "wrong params"
+            "type": "400",
+            "description": "Wrong parameters",
+            "status": 400
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -113,13 +142,15 @@
         "throws": [
           {
             "name": "WRONG_PARAMS",
-            "type": "Error 400",
-            "description": "wrong params"
+            "type": "400",
+            "description": "Wrong parameters",
+            "status": 400
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -152,12 +183,14 @@
           {
             "name": "WRONG_PARAMS",
             "type": "Error 400",
-            "description": "wrong params"
+            "description": "wrong params",
+            "status": 0
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -189,12 +222,14 @@
           {
             "name": "WRONG_PARAMS",
             "type": "Error 400",
-            "description": "wrong params"
+            "description": "wrong params",
+            "status": 0
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -219,12 +254,14 @@
           {
             "name": "WRONG_PARAMS",
             "type": "Error 400",
-            "description": "wrong params"
+            "description": "wrong params",
+            "status": 0
           },
           {
             "name": "ACQUIRER_ERROR",
             "type": "Error 3000",
-            "description": "acquirer error"
+            "description": "acquirer error",
+            "status": 0
           }
         ],
         "example": [
@@ -248,13 +285,15 @@
         "throws": [
           {
             "name": "WRONG_PARAMS",
-            "type": "Error 400",
-            "description": "wrong params"
+            "type": "400",
+            "description": "Wrong parameters",
+            "status": 400
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -279,13 +318,15 @@
         "throws": [
           {
             "name": "WRONG_PARAMS",
-            "type": "Error 400",
-            "description": "wrong params"
+            "type": "400",
+            "description": "Wrong parameters",
+            "status": 400
           },
           {
             "name": "ACQUIRER_ERROR",
-            "type": "Error 3000",
-            "description": "acquirer error"
+            "type": "3000",
+            "description": "Acquirer error from Errors",
+            "status": 400
           }
         ],
         "example": [
@@ -385,17 +426,20 @@
           {
             "name": "",
             "type": "InvalidArgumentException",
-            "description": ""
+            "description": "",
+            "status": 0
           },
           {
             "name": "",
             "type": "",
-            "description": "Will throw an error if the argument is null."
+            "description": "Will throw an error if the argument is null.",
+            "status": 0
           },
           {
             "name": "",
             "type": "DivideByZero",
-            "description": "Argument x must be non-zero."
+            "description": "Argument x must be non-zero.",
+            "status": 0
           }
         ],
         "returns": [
@@ -499,17 +543,20 @@
           {
             "name": "",
             "type": "InvalidArgumentException",
-            "description": ""
+            "description": "",
+            "status": 0
           },
           {
             "name": "",
             "type": "",
-            "description": "Will throw an error if the argument is null."
+            "description": "Will throw an error if the argument is null.",
+            "status": 0
           },
           {
             "name": "",
             "type": "DivideByZero",
-            "description": "Argument x must be non-zero."
+            "description": "Argument x must be non-zero.",
+            "status": 0
           }
         ],
         "returns": [
@@ -612,17 +659,20 @@
           {
             "name": "",
             "type": "InvalidArgumentException",
-            "description": ""
+            "description": "",
+            "status": 0
           },
           {
             "name": "",
             "type": "",
-            "description": "Will throw an error if the argument is null."
+            "description": "Will throw an error if the argument is null.",
+            "status": 0
           },
           {
             "name": "",
             "type": "DivideByZero",
-            "description": "Argument x must be non-zero."
+            "description": "Argument x must be non-zero.",
+            "status": 0
           }
         ],
         "returns": [
@@ -726,17 +776,20 @@
           {
             "name": "",
             "type": "InvalidArgumentException",
-            "description": ""
+            "description": "",
+            "status": 0
           },
           {
             "name": "",
             "type": "",
-            "description": "Will throw an error if the argument is null."
+            "description": "Will throw an error if the argument is null.",
+            "status": 0
           },
           {
             "name": "",
             "type": "DivideByZero",
-            "description": "Argument x must be non-zero."
+            "description": "Argument x must be non-zero.",
+            "status": 0
           }
         ],
         "returns": [
@@ -771,7 +824,8 @@
           {
             "name": "DOC_NO_DOCUMENT",
             "type": "Error 1003",
-            "description": "no json file for documentation"
+            "description": "no json file for documentation",
+            "status": 0
           }
         ],
         "example": [
@@ -796,8 +850,9 @@
         "throws": [
           {
             "name": "DOC_NO_DOCUMENT",
-            "type": "Error 1002",
-            "description": "no json file for documentation"
+            "type": "1001",
+            "description": "no json for documentation",
+            "status": 400
           }
         ],
         "example": [
@@ -823,7 +878,8 @@
           {
             "name": "DOC_NO_DOCUMENT",
             "type": "Error 1006",
-            "description": "no json file for documentation"
+            "description": "no json file for documentation",
+            "status": 0
           }
         ],
         "example": [
@@ -849,7 +905,8 @@
           {
             "name": "DOC_NO_DOCUMENT",
             "type": "Error 1004",
-            "description": "no json file for documentation"
+            "description": "no json file for documentation",
+            "status": 0
           }
         ],
         "example": [
@@ -875,7 +932,8 @@
           {
             "name": "DOC_NO_DOCUMENT",
             "type": "Error 1005",
-            "description": "no json file for documentation"
+            "description": "no json file for documentation",
+            "status": 0
           }
         ],
         "example": [

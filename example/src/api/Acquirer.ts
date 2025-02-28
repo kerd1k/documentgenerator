@@ -24,10 +24,14 @@ export class Acquirer extends BaseEndpoint {
      * Add new acquirer
      * Multi-line **description**
      *
-     * @param {object} data - payment details depends on type
+     * @param {IAcquirerEntity} IAcquirerEntity - payment details depends on type
+     * @param {IAcquirer} IAcquirer - payment details depends on type
+     * @param {string} [optionalString] - payment details depends on type
+     * @param {string} [testStringName="test"] - payment details depends on type
      * @returns {IAcquirer} IAcquirer - acquirer object
-     * @throws {Error 400} WRONG_PARAMS - wrong params
-     * @throws {Error 3000} ACQUIRER_ERROR - acquirer error
+     * @throws {WRONG_PARAMS} WRONG_PARAMS - wrong params
+     * @throws {ACQUIRER_ERROR} ACQUIRER_ERROR - acquirer error
+     * @throws {3000} ACQUIRER_ERROR2 - acquirer222 error222
      *
      * @example
      *	curl --location 'http://localhost:8095/api/template/transfer/add' \
@@ -63,8 +67,8 @@ export class Acquirer extends BaseEndpoint {
      * @param {string} id - id to update
      * @param {object} data - acquirer data
      * @returns {boolean} true - if updated
-     * @throws {Error 400} WRONG_PARAMS - wrong params
-     * @throws {Error 3000} ACQUIRER_ERROR - acquirer error
+     * @throws {WRONG_PARAMS} WRONG_PARAMS - wrong params
+     * @throws {ACQUIRER_ERROR} ACQUIRER_ERROR - acquirer error
      *
      * @example
      *	POST http://localhost/api/acquirer/update/<ID>
@@ -90,7 +94,7 @@ export class Acquirer extends BaseEndpoint {
      * @param {string} id - id to delete
      * @returns {boolean} result - true if deleted
      * @throws {Error 400} WRONG_PARAMS - wrong params
-     * @throws {Error 3000} ACQUIRER_ERROR - acquirer error
+     * @throws {ACQUIRER_ERROR} ACQUIRER_ERROR - acquirer error
      *
      * @example
      *	DELETE http://localhost/api/acquirer/delete/<ID>
@@ -130,8 +134,8 @@ export class Acquirer extends BaseEndpoint {
      * Get acquirer by ID
      *
      * @returns {IAcquirer[]} IAcquirer - list of acquirers
-     * @throws {Error 400} WRONG_PARAMS - wrong params
-     * @throws {Error 3000} ACQUIRER_ERROR - acquirer error
+     * @throws {WRONG_PARAMS} WRONG_PARAMS - wrong params
+     * @throws {ACQUIRER_ERROR} ACQUIRER_ERROR - acquirer error
      *
      * @example
      *	POST http://localhost/api/acquirer/get/<ID>

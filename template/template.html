@@ -367,7 +367,7 @@
                                         (p) => `
                                     <tr>
                                         <td>${p.name}</td>
-                                        <td><code>${p.type}</code></td>
+                                        <td><code style="white-space: pre;">${p.type}</code></td>
                                         <td>${p.optional ? "—" : "✓"}</td>
                                         <td>${p.description}</td>
                                         ${params.some((p) => p.default) ? `<td>${p.default || "—"}</td>` : ""}
@@ -453,7 +453,7 @@
                                         (r) => `
                                     <tr>
                                         <td>${r.name}</td>
-                                        <td><code>${r.type}</code></td>
+                                        <td><code style="white-space: pre;">${r.type}</code></td>
                                         <td>${r.description}</td>
                                     </tr>
                                 `
@@ -474,6 +474,7 @@
                                 <tr>
                                     <th>Error</th>
                                     <th>Code</th>
+                                    <th>Http Status</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
@@ -484,6 +485,7 @@
                                     <tr>
                                         <td>${e.name}</td>
                                         <td><span class="badge error">${e.type}</span></td>
+                                        <td>${e.status}</td>
                                         <td>${e.description}</td>
                                     </tr>
                                 `

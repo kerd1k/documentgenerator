@@ -11,7 +11,7 @@ export interface ExampleRequestVO {
     isAdmin: boolean;
 }
 
-export type project = "vibo.tips" | "amazing.money" | "freeply.cards";
+export type TProject = "vibo.tips" | "amazing.money" | "freeply.cards";
 
 export class Example extends BaseEndpoint {
     constructor() {
@@ -49,7 +49,7 @@ export class Example extends BaseEndpoint {
     /**
      * @description - TEST GET
      * @returns {JSON2} json - JSON from file
-     * @throws {Error 1002} DOC_NO_DOCUMENT - no json file for documentation
+     * @throws {DOC_NO_DOCUMENT} DOC_NO_DOCUMENT - no json file for documentation
      * @example - GET http://localhost/auth/doc/ui/test/
      */
     async getDocTestGet(): Promise<TransferPacketVO<any>> {

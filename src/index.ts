@@ -5,20 +5,19 @@
 import { DocumentGenerator } from "./DocumentGenerator";
 import { copyFile, getArgument, replaceInFile } from "./utils";
 
-//TODO: get interfaces and types + set to UI
-//TODO: Errors parse and add to UI
-//TODO: add NodeJS example
+//TODO: add NodeJS example - CURL
 
 try {
     const config = {
-        source: getArgument("--source", null),
-        endpoint: getArgument("--endpoint", "/api"),
-        destination: getArgument("--destination", null),
-        inject: getArgument("--inject", null),
-        injectVariable: getArgument("--injectVariable", "{{docjson}}"),
-        template: getArgument("--template", null),
-        templatePath: getArgument("--templatePath", `${__dirname}/template.html`),
-        docPath: getArgument("--docPath", null),
+        source: getArgument("--source", null), //path where files with endpoints are located
+        endpoint: getArgument("--endpoint", "/api"), //start endpoints /api/<other_endpoints>
+        destination: getArgument("--destination", null), //where to store doc.json
+        inject: getArgument("--inject", null), //.html file (documentation.html) where to inject json from doc.json
+        injectVariable: getArgument("--injectVariable", "{{docjson}}"), //variable to replace in inject file
+        template: getArgument("--template", null), //where to store .html file (documentation.html)
+        templatePath: getArgument("--templatePath", `${__dirname}/template.html`), //location of template.html
+        docPath: getArgument("--docPath", null), //localtion of .md files
+        // projectPath: getArgument("--projectPath", null), //where project files are located - types, interfaces, errors etc.
     };
 
     const documentGeneratorConfig = {
