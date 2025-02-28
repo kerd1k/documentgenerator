@@ -24,10 +24,11 @@ export class Acquirer extends BaseEndpoint {
      * Add new acquirer
      * Multi-line **description**
      *
-     * @param {IAcquirerEntity} IAcquirerEntity - payment details depends on type
-     * @param {IAcquirer} IAcquirer - payment details depends on type
-     * @param {string} [optionalString] - payment details depends on type
-     * @param {string} [testStringName="test"] - payment details depends on type
+     * @param {IAcquirerEntity} IAcquirerEntity - acquirer entity
+     * @param {IAcquirer} IAcquirer - acquirer object
+     * @param {IAcquirer[]} IAcquirer[] - array of acquirers 
+     * @param {string} [optionalString] - optional string
+     * @param {string} [testStringName="test"] - optional string with default value
      * @returns {IAcquirer} IAcquirer - acquirer object
      * @throws {WRONG_PARAMS} WRONG_PARAMS - wrong params
      * @throws {ACQUIRER_ERROR} ACQUIRER_ERROR - acquirer error

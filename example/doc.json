@@ -11,25 +11,31 @@
           {
             "name": "IAcquirerEntity",
             "type": "interface IAcquirerEntity extends Omit&lt;IAcquirer, \"deletedAt\" | \"createdAt\" | \"updatedAt\" | \"data\"&gt; {\r\n    deleted_at: string | null;\r\n    ctime: string;\r\n    utime: string | null;\r\n    data: string;\r\n}",
-            "description": "payment details depends on type",
+            "description": "acquirer entity",
             "optional": false
           },
           {
             "name": "IAcquirer",
             "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}",
-            "description": "payment details depends on type",
+            "description": "acquirer object",
+            "optional": false
+          },
+          {
+            "name": "IAcquirer[]",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
+            "description": "array of acquirers",
             "optional": false
           },
           {
             "name": "optionalString",
             "type": "string",
-            "description": "payment details depends on type",
+            "description": "optional string",
             "optional": true
           },
           {
             "name": "testStringName",
             "type": "string",
-            "description": "payment details depends on type",
+            "description": "optional string with default value",
             "optional": true,
             "default": "\"test\""
           }
@@ -246,7 +252,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "IAcquirer[]",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -278,7 +284,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "IAcquirer[]",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -311,7 +317,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "IAcquirer[]",
+            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -365,7 +371,7 @@
           },
           {
             "name": "employees",
-            "type": "Object[]",
+            "type": "Object",
             "description": "The employees who are responsible for the project.",
             "optional": false
           },
@@ -409,7 +415,7 @@
           },
           {
             "name": "somebody",
-            "type": "(string|string[])",
+            "type": "(string|string)",
             "description": "Somebody's name, or an array of names.",
             "optional": true,
             "default": "John Doe"
@@ -482,7 +488,7 @@
           },
           {
             "name": "employees",
-            "type": "Object[]",
+            "type": "Object",
             "description": "The employees who are responsible for the project.",
             "optional": false
           },
@@ -526,7 +532,7 @@
           },
           {
             "name": "somebody",
-            "type": "(string|string[])",
+            "type": "(string|string)",
             "description": "Somebody's name, or an array of names.",
             "optional": true,
             "default": "John Doe"
@@ -598,7 +604,7 @@
           },
           {
             "name": "employees",
-            "type": "Object[]",
+            "type": "Object",
             "description": "The employees who are responsible for the project.",
             "optional": false
           },
@@ -642,7 +648,7 @@
           },
           {
             "name": "somebody",
-            "type": "(string|string[])",
+            "type": "(string|string)",
             "description": "Somebody's name, or an array of names.",
             "optional": true,
             "default": "John Doe"
@@ -715,7 +721,7 @@
           },
           {
             "name": "employees",
-            "type": "Object[]",
+            "type": "Object",
             "description": "The employees who are responsible for the project.",
             "optional": false
           },
@@ -759,7 +765,7 @@
           },
           {
             "name": "somebody",
-            "type": "(string|string[])",
+            "type": "(string|string)",
             "description": "Somebody's name, or an array of names.",
             "optional": true,
             "default": "John Doe"

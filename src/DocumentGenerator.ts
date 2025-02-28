@@ -458,8 +458,17 @@ export class DocumentGenerator {
 
     private getType(type: string) {
         if (type) {
-            if (type in this.types) {
-                return this.types[type].replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            //check if [] exists
+            if (type.includes("[]")) {
+                type = type.replace("[]", "");
+
+                if (type in this.types) {
+                    return this.types[type].replace(/</g, "&lt;").replace(/>/g, "&gt;") + "[]";
+                }
+            } else {
+                if (type in this.types) {
+                    return this.types[type].replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                }
             }
         }
 
