@@ -1,6 +1,6 @@
 {
   "/auth/acquirer": {
-    "description": "# An \"h1\" header\r\n\r\nParagraphs are separated by a blank line.\r\n\r\n2nd paragraph. _Italic_, **bold**, and `monospace`. Itemized lists\r\nlook like:\r\n\r\n-   this one\r\n-   that one\r\n-   the other one\r\n\r\nNote that --- not considering the asterisk --- the actual text\r\ncontent starts at 4-columns in.\r\n\r\n> Block quotes are\r\n> written like so.\r\n>\r\n> They can span multiple paragraphs,\r\n> if you like.\r\n\r\nUse 3 dashes for an em-dash. Use 2 dashes for ranges (ex., \"it's all\r\nin chapters 12--14\"). Three dots ... will be converted to an ellipsis.\r\nUnicode is supported. ☺\r\n\r\n## An h2 header\r\n\r\nHere's a numbered list:\r\n\r\n1.  first item\r\n2.  second item\r\n3.  third item\r\n\r\nNote again how the actual text starts at 4 columns in (4 characters\r\nfrom the left side). Here's a code sample:\r\n\r\n    # Let me re-iterate ...\r\n    for i in 1 .. 10 { do-something(i) }\r\n\r\nAs you probably guessed, indented 4 spaces. By the way, instead of\r\nindenting the block, you can use delimited blocks, if you like:\r\n\r\n```\r\ndefine foobar() {\r\n    print \"Welcome to flavor country!\";\r\n}\r\n```\r\n\r\n(which makes copying & pasting easier). You can optionally mark the\r\ndelimited block for Pandoc to syntax highlight it:\r\n\r\n```python\r\nimport time\r\n# Quick, count to ten!\r\nfor i in range(10):\r\n    # (but not *too* quick)\r\n    time.sleep(0.5)\r\n    print i\r\n```\r\n",
+    "description": "# An \"h1\" header\n\nParagraphs are separated by a blank line.\n\n2nd paragraph. _Italic_, **bold**, and `monospace`. Itemized lists\nlook like:\n\n-   this one\n-   that one\n-   the other one\n\nNote that --- not considering the asterisk --- the actual text\ncontent starts at 4-columns in.\n\n> Block quotes are\n> written like so.\n>\n> They can span multiple paragraphs,\n> if you like.\n\nUse 3 dashes for an em-dash. Use 2 dashes for ranges (ex., \"it's all\nin chapters 12--14\"). Three dots ... will be converted to an ellipsis.\nUnicode is supported. ☺\n\n## An h2 header\n\nHere's a numbered list:\n\n1.  first item\n2.  second item\n3.  third item\n\nNote again how the actual text starts at 4 columns in (4 characters\nfrom the left side). Here's a code sample:\n\n    # Let me re-iterate ...\n    for i in 1 .. 10 { do-something(i) }\n\nAs you probably guessed, indented 4 spaces. By the way, instead of\nindenting the block, you can use delimited blocks, if you like:\n\n```\ndefine foobar() {\n    print \"Welcome to flavor country!\";\n}\n```\n\n(which makes copying & pasting easier). You can optionally mark the\ndelimited block for Pandoc to syntax highlight it:\n\n```python\nimport time\n# Quick, count to ten!\nfor i in range(10):\n    # (but not *too* quick)\n    time.sleep(0.5)\n    print i\n```\n",
     "endpoints": {
       "POST add": {
         "handler": "add",
@@ -10,19 +10,19 @@
         "parameters": [
           {
             "name": "IAcquirerEntity",
-            "type": "interface IAcquirerEntity extends Omit&lt;IAcquirer, \"deletedAt\" | \"createdAt\" | \"updatedAt\" | \"data\"&gt; {\r\n    deleted_at: string | null;\r\n    ctime: string;\r\n    utime: string | null;\r\n    data: string;\r\n}",
+            "type": "interface IAcquirerEntity extends Omit&lt;IAcquirer, \"deletedAt\" | \"createdAt\" | \"updatedAt\" | \"data\"&gt; {\n    deleted_at: string | null;\n    ctime: string;\n    utime: string | null;\n    data: string;\n}",
             "description": "acquirer entity",
             "optional": false
           },
           {
             "name": "IAcquirer",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}",
             "description": "acquirer object",
             "optional": false
           },
           {
             "name": "IAcquirer[]",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}[]",
             "description": "array of acquirers",
             "optional": false
           },
@@ -44,7 +44,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}",
             "description": "acquirer object"
           }
         ],
@@ -252,7 +252,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -284,7 +284,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -317,7 +317,7 @@
         "returns": [
           {
             "name": "IAcquirer",
-            "type": "interface IAcquirer {\r\n  id: number;\r\n  data: IAcquirerData;\r\n  createdAt: string;\r\n  updatedAt: string | null;\r\n  deletedAt: string | null;\r\n  project_id: number;\r\n  trx_uid?:string;\r\n}[]",
+            "type": "interface IAcquirer {\n  id: number;\n  data: IAcquirerData;\n  createdAt: string;\n  updatedAt: string | null;\n  deletedAt: string | null;\n  project_id: number;\n  trx_uid?:string;\n}[]",
             "description": "list of acquirers"
           }
         ],
@@ -463,7 +463,7 @@
       },
       "ALL testWithIgnoreInterceptor": {
         "handler": "testDocs",
-        "ignoreInterceptor": true,
+        "ignoreInterceptor": "true ",
         "fullPath": "/auth/example/testWithIgnoreInterceptor",
         "method": "ALL",
         "description": "TestDocs route",
@@ -696,7 +696,7 @@
       },
       "ALL testWithMultiline": {
         "handler": "testDocs",
-        "ignoreInterceptor": false,
+        "ignoreInterceptor": "false",
         "fullPath": "/auth/example/testWithMultiline",
         "method": "ALL",
         "description": "TestDocs route",
@@ -813,7 +813,7 @@
       },
       "POST ui/testWithDifferentMethods": {
         "handler": "getDocTestPost",
-        "ignoreInterceptor": false,
+        "ignoreInterceptor": "false",
         "fullPath": "/auth/example/ui/testWithDifferentMethods",
         "method": "POST",
         "description": "TEST POST",
@@ -840,7 +840,7 @@
       },
       "GET ui/testWithDifferentMethods": {
         "handler": "getDocTestGet",
-        "ignoreInterceptor": false,
+        "ignoreInterceptor": "false",
         "fullPath": "/auth/example/ui/testWithDifferentMethods",
         "method": "GET",
         "description": "TEST GET",
@@ -867,7 +867,7 @@
       },
       "DELETE ui/testWithDifferentMethods": {
         "handler": "getDocTestDel",
-        "ignoreInterceptor": false,
+        "ignoreInterceptor": "false",
         "fullPath": "/auth/example/ui/testWithDifferentMethods",
         "method": "DELETE",
         "description": "TEST DELETE",
@@ -894,7 +894,7 @@
       },
       "PUT ui/testWithDifferentMethods": {
         "handler": "getDocTestPut",
-        "ignoreInterceptor": true,
+        "ignoreInterceptor": "true",
         "fullPath": "/auth/example/ui/testWithDifferentMethods",
         "method": "PUT",
         "description": "TEST PUT",
@@ -921,7 +921,7 @@
       },
       "ASD ui/testWithDifferentMethods": {
         "handler": "getDocTestAsd",
-        "ignoreInterceptor": false,
+        "ignoreInterceptor": "false",
         "fullPath": "/auth/example/ui/testWithDifferentMethods",
         "method": "ASD",
         "description": "TEST ASD - manual method",

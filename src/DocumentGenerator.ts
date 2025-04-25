@@ -230,6 +230,7 @@ export class DocumentGenerator {
                 .replace(/(,)\s*}/g, "}") // remove comma before bracket }
                 .replace(/,\s*$/, "") // remove comma at the end
                 .replace(/this\.(\w+)/g, '"$1"') // change "this.method" to "method"
+                .replace(/:\s*([^",\n\r\}\{]+)(?=[,\n\r\}])/g, ': "$1"') //add quotes without quotes
                 .replace(/'/g, '"') // change ' to "
                 .replace(/(\w+):/g, '"$1":') // change all keys to JSON format ("key": value)
                 .trim();

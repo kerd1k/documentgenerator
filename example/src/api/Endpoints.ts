@@ -23,11 +23,12 @@ export class Example extends BaseEndpoint {
             { endpoint: "testWithIgnoreInterceptor", handler: this.testDocs, ignoreInterceptor: true },
             { endpoint: "testPrivate", handler: this.testDocsPrivate },
             { endpoint: "testWithCommentInside", handler: this.testDocsPrivate /*testDocsPrivate2*/ },
-            { endpoint: "ui/testWithMultiSlash", handler: this.testDocs },
+            { endpoint: "ui/testWithMultiSlash", handler: this.testDocs, validationModel: _IBalancerStrageyRequest },
             {
                 ignoreInterceptor: false,
                 endpoint: "testWithMultiline",
                 handler: this.testDocs,
+                validationModel: _IBalancerStrageyRequest,
             },
             {
                 endpoint: "ui/testWithDifferentMethods",
